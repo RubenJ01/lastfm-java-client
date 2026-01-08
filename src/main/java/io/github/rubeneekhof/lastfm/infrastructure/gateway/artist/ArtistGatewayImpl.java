@@ -31,11 +31,15 @@ public class ArtistGatewayImpl implements ArtistGateway {
     }
 
     @Override
-    public List<Artist> getSimilar(String artistName, int limit) {
+    public List<Artist> getSimilar(String artistName, boolean autocorrect, int limit) {
         GetSimilarResponse response = getAndParse(
                 http, mapper,
                 "artist.getsimilar",
-                Map.of("artist", artistName, "limit", String.valueOf(limit)),
+                Map.of(
+                        "artist", artistName,
+                        "autocorrect", String.valueOf(autocorrect),
+                        "limit", String.valueOf(limit)
+                ),
                 GetSimilarResponse.class
         );
 
