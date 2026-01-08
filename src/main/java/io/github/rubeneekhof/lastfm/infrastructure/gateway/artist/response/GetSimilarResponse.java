@@ -20,7 +20,7 @@ public class GetSimilarResponse {
         public String name;
         public String mbid;
         public String url;
-        public double match; // similarity score 0..1
+        public double match;
         public List<Image> image;
         public String streamable;
     }
