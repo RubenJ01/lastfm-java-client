@@ -12,8 +12,70 @@ public record Artist(
         List<Tag> tags,
         Bio bio
 ) {
-    public record Image(String size, String url) {}
-    public record Stats(int listeners, int plays) {}
-    public record Tag(String name, String url) {}
-    public record Bio(String published, String summary, String content) {}
+    public record Image(String size, String url) {
+        @Override
+        public String toString() {
+            return "Image { size: '" + size + "', url: '" + url + "' }";
+        }
+    }
+
+    public record Stats(int listeners, int plays) {
+        @Override
+        public String toString() {
+            return "Stats { listeners: " + listeners + ", plays: " + plays + " }";
+        }
+    }
+
+    public record Tag(String name, String url) {
+        @Override
+        public String toString() {
+            return "Tag { name: '" + name + "', url: '" + url + "' }";
+        }
+    }
+
+    public record Bio(String published, String summary, String content) {
+        @Override
+        public String toString() {
+            return "Bio { published: '" + published + "', summary: '" + summary + "', content: '" + content + "' }";
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Artist {\n");
+        sb.append("    name: '").append(name).append("',\n");
+        sb.append("    mbid: '").append(mbid).append("',\n");
+        sb.append("    url: '").append(url).append("',\n");
+
+        sb.append("    images: [\n");
+        if (images != null) {
+            for (Image img : images) {
+                sb.append("        ").append(img).append(",\n");
+            }
+        }
+        sb.append("    ],\n");
+
+        sb.append("    stats: ").append(stats != null ? stats : "null").append(",\n");
+
+        sb.append("    similar: [\n");
+        if (similar != null) {
+            for (Artist art : similar) {
+                sb.append("        '").append(art.name).append("',\n");
+            }
+        }
+        sb.append("    ],\n");
+
+        sb.append("    tags: [\n");
+        if (tags != null) {
+            for (Tag tag : tags) {
+                sb.append("        ").append(tag).append(",\n");
+            }
+        }
+        sb.append("    ],\n");
+
+        sb.append("    bio: ").append(bio != null ? bio : "null").append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
 }
