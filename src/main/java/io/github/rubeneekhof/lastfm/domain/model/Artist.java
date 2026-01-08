@@ -74,8 +74,21 @@ public record Artist(
         }
         sb.append("    ],\n");
 
-        sb.append("    bio: ").append(bio != null ? bio : "null").append("\n");
-        sb.append("}");
+        sb.append("    bio: ");
+        if (bio != null) {
+            sb.append("Bio {\n");
+            sb.append("        published: '").append(bio.published).append("',\n");
+            sb.append("        summary: '").append(bio.summary.replace("\n", "\n        "))
+                    .append("',\n");
+            sb.append("        content: '").append(bio.content.replace("\n", "\n        "))
+                    .append("'\n");
+            sb.append("    }");
+        } else {
+            sb.append("null");
+        }
+        sb.append("\n}");
+
         return sb.toString();
     }
+
 }
