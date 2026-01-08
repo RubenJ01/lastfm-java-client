@@ -55,7 +55,7 @@ public class ArtistMapper {
         );
     }
 
-    public static Artist   toDomain(GetSimilarResponse.SimilarArtistData data) {
+    public static Artist toDomain(GetSimilarResponse.SimilarArtistData data) {
         if (data == null) return null;
 
         List<Artist.Image> images = null;
