@@ -7,6 +7,7 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetIn
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +27,30 @@ public class ArtistGatewayImpl implements ArtistGateway {
     }
 
     @Override
-    public Artist getInfo(String artistName) {
+    public Artist getInfo(String artist, String mbid, String lang, Boolean autocorrect, String username) {
+        Map<String, String> params = new HashMap<>();
+        
+        if (artist != null) {
+            params.put("artist", artist);
+        }
+        if (mbid != null) {
+            params.put("mbid", mbid);
+        }
+        if (lang != null) {
+            params.put("lang", lang);
+        }
+        if (autocorrect != null) {
+            params.put("autocorrect", autocorrect ? "1" : "0");
+        }
+        if (username != null) {
+            params.put("username", username);
+        }
+
         GetInfoResponse response = getAndParse(
                 http,
                 mapper,
                 "artist.getinfo",
-                Map.of("artist", artistName),
+                params,
                 GetInfoResponse.class
         );
         return ArtistMapper.from(response);

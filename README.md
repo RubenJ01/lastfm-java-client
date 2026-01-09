@@ -8,11 +8,36 @@
 ## Usage
 
 ````java
+import io.github.rubeneekhof.lastfm.api.LastFmClient;
+import io.github.rubeneekhof.lastfm.application.ArtistGetInfoRequest;
+
 var apiKey = "...";
 LastFmClient client = LastFmClient.create(apiKey);
 
-var similar = client.artists().getInfo("Rina Sawayama");
-System.out.println(similar);
+// Simple usage
+var artist = client.artists().getInfo("Rina Sawayama");
+
+// With language
+var artistEn = client.artists().getInfo("Rina Sawayama", "en");
+
+// With autocorrect
+var artistCorrected = client.artists().getInfo("Rina Sawayama", true);
+
+// Full builder pattern with all options
+var artistFull = client.artists().getInfo(
+    ArtistGetInfoRequest.artist("Rina Sawayama")
+        .lang("en")
+        .autocorrect(true)
+        .username("myusername")
+        .build()
+);
+
+// Using MBID instead of artist name
+var artistByMbid = client.artists().getInfo(
+    ArtistGetInfoRequest.mbid("bfcc6d75-a6a5-4bc6-8282-47aec8531818")
+        .lang("en")
+        .build()
+);
 ````
 
 ## Project Structure

@@ -18,7 +18,27 @@ public class ArtistService {
 
     public Artist getInfo(String artistName) {
         validateArtistName(artistName);
-        return gateway.getInfo(artistName);
+        return getInfo(ArtistGetInfoRequest.artist(artistName).build());
+    }
+
+    public Artist getInfo(String artist, String lang) {
+        validateArtistName(artist);
+        return getInfo(ArtistGetInfoRequest.artist(artist).lang(lang).build());
+    }
+
+    public Artist getInfo(String artist, boolean autocorrect) {
+        validateArtistName(artist);
+        return getInfo(ArtistGetInfoRequest.artist(artist).autocorrect(autocorrect).build());
+    }
+
+    public Artist getInfo(ArtistGetInfoRequest request) {
+        return gateway.getInfo(
+                request.artist(),
+                request.mbid(),
+                request.lang(),
+                request.autocorrect(),
+                request.username()
+        );
     }
 
     public List<Artist> getSimilar(String artistName) {
