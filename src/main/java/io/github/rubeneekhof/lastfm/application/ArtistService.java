@@ -16,9 +16,9 @@ public class ArtistService {
         this.gateway = gateway;
     }
 
-    public Artist getInfo(String artistName) {
-        validateArtistName(artistName);
-        return getInfo(ArtistGetInfoRequest.artist(artistName).build());
+    public Artist getInfo(String artist) {
+        validateArtistName(artist);
+        return getInfo(ArtistGetInfoRequest.artist(artist).build());
     }
 
     public Artist getInfo(String artist, String lang) {
