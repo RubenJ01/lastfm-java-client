@@ -1,5 +1,6 @@
 package io.github.rubeneekhof.lastfm.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.application.ArtistService;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.ArtistGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
@@ -14,7 +15,8 @@ public class LastFmClient {
 
     public static LastFmClient create(String apiKey) {
         HttpExecutor http = new HttpExecutor(apiKey);
-        ArtistGatewayImpl artistGateway = new ArtistGatewayImpl(http);
+        ObjectMapper mapper = new ObjectMapper();
+        ArtistGatewayImpl artistGateway = new ArtistGatewayImpl(http, mapper);
 
         ArtistService artistService = new ArtistService(artistGateway);
         return new LastFmClient(artistService);

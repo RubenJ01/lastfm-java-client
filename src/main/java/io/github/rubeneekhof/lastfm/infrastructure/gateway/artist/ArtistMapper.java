@@ -5,75 +5,137 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetIn
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * Maps Last.fm API DTOs to domain models.
+ * This is the only class allowed to access DTO internals.
+ * All collections are guaranteed to be non-null (empty lists instead of null).
+ */
 public class ArtistMapper {
 
-    public static Artist toDomain(GetInfoResponse.ArtistData data) {
-        if (data == null) return null;
-
-        List<Artist.Image> images = null;
-        if (data.image != null) {
-            images = data.image.stream()
-                    .map(img -> new Artist.Image(img.size, img.url))
-                    .toList();
+    /**
+     * Maps the full getInfo response to domain model.
+     */
+    public static Artist from(GetInfoResponse response) {
+        if (response == null || response.artist == null) {
+            return null;
         }
 
-        List<Artist> similar = null;
-        if (data.similar != null && data.similar.artist != null) {
-            similar = data.similar.artist.stream()
-                    .map(a -> new Artist(a.name, a.mbid, a.url, null, null,
-                            null, null, null))
-                    .toList();
-        }
-
-        List<Artist.Tag> tags = null;
-        if (data.tags != null && data.tags.tag != null) {
-            tags = data.tags.tag.stream()
-                    .map(t -> new Artist.Tag(t.name, t.url))
-                    .toList();
-        }
-
-        Artist.Stats stats = null;
-        if (data.stats != null) {
-            stats = new Artist.Stats(data.stats.listeners, data.stats.plays);
-        }
-
-        Artist.Bio bio = null;
-        if (data.bio != null) {
-            bio = new Artist.Bio(data.bio.published, data.bio.summary, data.bio.content);
-        }
-
+        GetInfoResponse.ArtistData data = response.artist;
         return new Artist(
                 data.name,
                 data.mbid,
                 data.url,
-                images,
-                stats,
-                similar,
-                tags,
-                bio
+                mapImages(data.image),
+                mapStats(data.stats),
+                mapSimilar(data.similar),
+                mapTags(data.tags),
+                mapBio(data.bio)
         );
     }
 
-    public static Artist toDomain(GetSimilarResponse.SimilarArtistData data) {
-        if (data == null) return null;
-
-        List<Artist.Image> images = null;
-        if (data.image != null) {
-            images = data.image.stream()
-                    .map(img -> new Artist.Image(img.size, img.url))
-                    .toList();
+    /**
+     * Maps a similar artist response to domain model.
+     */
+    public static Artist from(GetSimilarResponse.SimilarArtistData data) {
+        if (data == null) {
+            return null;
         }
 
         return new Artist(
                 data.name,
                 data.mbid,
                 data.url,
-                images,
+                mapImagesFromSimilar(data.image),
                 null,
-                null,
-                null,
+                List.of(),
+                List.of(),
                 null
         );
+    }
+
+    /**
+     * Maps the full getSimilar response to a list of artists.
+     */
+    public static List<Artist> from(GetSimilarResponse response) {
+        if (response == null || response.similarartists == null || response.similarartists.artist == null) {
+            return List.of();
+        }
+
+        return response.similarartists.artist.stream()
+                .map(ArtistMapper::from)
+                .toList();
+    }
+
+    /**
+     * Maps nested similar artists from getInfo response.
+     * Returns minimal artist data (name, mbid, url only).
+     */
+    private static Artist fromSimilarArtist(GetInfoResponse.ArtistData data) {
+        if (data == null) {
+            return null;
+        }
+
+        return new Artist(
+                data.name,
+                data.mbid,
+                data.url,
+                List.of(),
+                null,
+                List.of(),
+                List.of(),
+                null
+        );
+    }
+
+    private static List<Artist.Image> mapImages(List<GetInfoResponse.Image> images) {
+        return Optional.ofNullable(images)
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.stream()
+                        .map(img -> new Artist.Image(img.size, img.url))
+                        .toList())
+                .orElse(List.of());
+    }
+
+    private static List<Artist.Image> mapImagesFromSimilar(List<GetSimilarResponse.Image> images) {
+        return Optional.ofNullable(images)
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.stream()
+                        .map(img -> new Artist.Image(img.size, img.url))
+                        .toList())
+                .orElse(List.of());
+    }
+
+    private static Artist.Stats mapStats(GetInfoResponse.Stats stats) {
+        return Optional.ofNullable(stats)
+                .map(s -> new Artist.Stats(s.listeners, s.plays))
+                .orElse(null);
+    }
+
+    private static List<Artist> mapSimilar(GetInfoResponse.Similar similar) {
+        return Optional.ofNullable(similar)
+                .map(s -> s.artist)
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.stream()
+                        .map(ArtistMapper::fromSimilarArtist)
+                        .toList())
+                .orElse(List.of());
+    }
+
+    private static List<Artist.Tag> mapTags(GetInfoResponse.Tags tags) {
+        return Optional.ofNullable(tags)
+                .map(t -> t.tag)
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.stream()
+                        .map(t -> new Artist.Tag(t.name, t.url))
+                        .toList())
+                .orElse(List.of());
+    }
+
+    private static Artist.Bio mapBio(GetInfoResponse.Bio bio) {
+        return Optional.ofNullable(bio)
+                .map(b -> new Artist.Bio(b.published, b.summary, b.content))
+                .orElse(null);
     }
 }

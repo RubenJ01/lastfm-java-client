@@ -10,30 +10,38 @@ import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Gateway implementation for Last.fm Artist API.
+ * Orchestrates HTTP → DTO → Domain mapping.
+ * Contains zero mapping logic - all mapping is delegated to ArtistMapper.
+ */
 public class ArtistGatewayImpl implements ArtistGateway {
 
     private final HttpExecutor http;
     private final ObjectMapper mapper;
 
-    public ArtistGatewayImpl(HttpExecutor http) {
+    public ArtistGatewayImpl(HttpExecutor http, ObjectMapper mapper) {
         this.http = http;
-        this.mapper = new ObjectMapper();
+        this.mapper = mapper;
     }
 
     @Override
     public Artist getInfo(String artistName) {
-        GetInfoResponse response = getAndParse(http, mapper,
+        GetInfoResponse response = getAndParse(
+                http,
+                mapper,
                 "artist.getinfo",
                 Map.of("artist", artistName),
                 GetInfoResponse.class
         );
-        return ArtistMapper.toDomain(response.artist);
+        return ArtistMapper.from(response);
     }
 
     @Override
     public List<Artist> getSimilar(String artistName, boolean autocorrect, int limit) {
         GetSimilarResponse response = getAndParse(
-                http, mapper,
+                http,
+                mapper,
                 "artist.getsimilar",
                 Map.of(
                         "artist", artistName,
@@ -42,13 +50,6 @@ public class ArtistGatewayImpl implements ArtistGateway {
                 ),
                 GetSimilarResponse.class
         );
-
-        if (response.similarartists == null || response.similarartists.artist == null) {
-            return List.of();
-        }
-
-        return response.similarartists.artist.stream()
-                .map(ArtistMapper::toDomain)
-                .toList();
+        return ArtistMapper.from(response);
     }
 }
