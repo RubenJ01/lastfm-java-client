@@ -7,6 +7,7 @@ public record Artist(
         String mbid,
         String url,
         List<Image> images,
+        String streamable,
         Stats stats,
         List<Artist> similar,
         List<Tag> tags,
@@ -19,10 +20,14 @@ public record Artist(
         }
     }
 
-    public record Stats(int listeners, int plays) {
+    public record Stats(int listeners, int plays, Integer userplaycount) {
         @Override
         public String toString() {
-            return "Stats { listeners: " + listeners + ", plays: " + plays + " }";
+            String result = "Stats { listeners: " + listeners + ", plays: " + plays;
+            if (userplaycount != null) {
+                result += ", userplaycount: " + userplaycount;
+            }
+            return result + " }";
         }
     }
 
@@ -47,6 +52,7 @@ public record Artist(
         sb.append("    name: '").append(name).append("',\n");
         sb.append("    mbid: '").append(mbid).append("',\n");
         sb.append("    url: '").append(url).append("',\n");
+        sb.append("    streamable: '").append(streamable != null ? streamable : "null").append("',\n");
 
         sb.append("    images: [\n");
         if (images != null) {

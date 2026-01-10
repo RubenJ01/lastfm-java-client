@@ -28,6 +28,7 @@ public class ArtistMapper {
                 data.mbid,
                 data.url,
                 mapImages(data.image),
+                data.streamable,
                 mapStats(data.stats),
                 mapSimilar(data.similar),
                 mapTags(data.tags),
@@ -48,6 +49,7 @@ public class ArtistMapper {
                 data.mbid,
                 data.url,
                 mapImagesFromSimilar(data.image),
+                data.streamable,
                 null,
                 List.of(),
                 List.of(),
@@ -83,6 +85,7 @@ public class ArtistMapper {
                 data.url,
                 List.of(),
                 null,
+                null,
                 List.of(),
                 List.of(),
                 null
@@ -109,7 +112,7 @@ public class ArtistMapper {
 
     private static Artist.Stats mapStats(GetInfoResponse.Stats stats) {
         return Optional.ofNullable(stats)
-                .map(s -> new Artist.Stats(s.listeners, s.plays))
+                .map(s -> new Artist.Stats(s.listeners, s.plays, s.userplaycount))
                 .orElse(null);
     }
 
