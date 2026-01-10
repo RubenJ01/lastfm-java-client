@@ -1,4 +1,4 @@
-package io.github.rubeneekhof.lastfm.application;
+package io.github.rubeneekhof.lastfm.application.artist;
 
 import io.github.rubeneekhof.lastfm.domain.model.Artist;
 import io.github.rubeneekhof.lastfm.domain.port.ArtistGateway;

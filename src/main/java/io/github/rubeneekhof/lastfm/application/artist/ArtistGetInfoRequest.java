@@ -1,20 +1,18 @@
-package io.github.rubeneekhof.lastfm.application;
+package io.github.rubeneekhof.lastfm.application.artist;
 
-/**
- * Request parameters for artist.getSimilar API call.
- * Either artist name or mbid must be provided.
- */
-public class ArtistGetSimilarRequest {
+public class ArtistGetInfoRequest {
     private final String artist;
     private final String mbid;
+    private final String lang;
     private final Boolean autocorrect;
-    private final Integer limit;
+    private final String username;
 
-    private ArtistGetSimilarRequest(Builder builder) {
+    private ArtistGetInfoRequest(Builder builder) {
         this.artist = builder.artist;
         this.mbid = builder.mbid;
+        this.lang = builder.lang;
         this.autocorrect = builder.autocorrect;
-        this.limit = builder.limit;
+        this.username = builder.username;
     }
 
     public static Builder artist(String artist) {
@@ -33,19 +31,24 @@ public class ArtistGetSimilarRequest {
         return mbid;
     }
 
+    public String lang() {
+        return lang;
+    }
+
     public Boolean autocorrect() {
         return autocorrect;
     }
 
-    public Integer limit() {
-        return limit;
+    public String username() {
+        return username;
     }
 
     public static class Builder {
         private String artist;
         private String mbid;
+        private String lang;
         private Boolean autocorrect;
-        private Integer limit;
+        private String username;
 
         public Builder artist(String artist) {
             this.artist = artist;
@@ -57,24 +60,26 @@ public class ArtistGetSimilarRequest {
             return this;
         }
 
+        public Builder lang(String lang) {
+            this.lang = lang;
+            return this;
+        }
+
         public Builder autocorrect(boolean autocorrect) {
             this.autocorrect = autocorrect;
             return this;
         }
 
-        public Builder limit(int limit) {
-            if (limit <= 0) {
-                throw new IllegalArgumentException("Limit must be greater than zero");
-            }
-            this.limit = limit;
+        public Builder username(String username) {
+            this.username = username;
             return this;
         }
 
-        public ArtistGetSimilarRequest build() {
+        public ArtistGetInfoRequest build() {
             if (artist == null && mbid == null) {
                 throw new IllegalArgumentException("Either artist name or mbid must be provided");
             }
-            return new ArtistGetSimilarRequest(this);
+            return new ArtistGetInfoRequest(this);
         }
     }
 }
