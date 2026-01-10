@@ -1,6 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.artist;
 
 import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetCorrectionResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
 
@@ -70,6 +71,33 @@ public class ArtistMapper {
         return response.similarartists.artist.stream()
                 .map(ArtistMapper::from)
                 .toList();
+    }
+
+    /**
+     * Maps the getCorrection response to an optional corrected artist.
+     */
+    public static Optional<Artist> from(GetCorrectionResponse response) {
+        if (response == null || response.corrections == null || response.corrections.correction == null) {
+            return Optional.empty();
+        }
+
+        GetCorrectionResponse.Correction correction = response.corrections.correction;
+        if (correction.artist == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new Artist(
+                correction.artist.name,
+                correction.artist.mbid,
+                correction.artist.url,
+                List.of(),
+                null,
+                null,
+                List.of(),
+                List.of(),
+                null,
+                null
+        ));
     }
 
     /**

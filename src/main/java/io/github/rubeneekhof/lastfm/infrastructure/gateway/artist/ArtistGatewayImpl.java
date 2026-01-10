@@ -6,6 +6,7 @@ import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailureException;
 import io.github.rubeneekhof.lastfm.domain.port.ArtistGateway;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.LastFmErrorMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetCorrectionResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
@@ -13,6 +14,7 @@ import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Gateway implementation for Last.fm Artist API.
@@ -87,6 +89,25 @@ public class ArtistGatewayImpl implements ArtistGateway {
                     "artist.getsimilar",
                     params,
                     GetSimilarResponse.class
+            );
+            return ArtistMapper.from(response);
+        } catch (LastFmException e) {
+            throw new LastFmFailureException(LastFmErrorMapper.map(e.code(), e.getMessage()));
+        }
+    }
+
+    @Override
+    public Optional<Artist> getCorrection(String artist) {
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("artist", artist);
+
+            GetCorrectionResponse response = getAndParse(
+                    http,
+                    mapper,
+                    "artist.getcorrection",
+                    params,
+                    GetCorrectionResponse.class
             );
             return ArtistMapper.from(response);
         } catch (LastFmException e) {

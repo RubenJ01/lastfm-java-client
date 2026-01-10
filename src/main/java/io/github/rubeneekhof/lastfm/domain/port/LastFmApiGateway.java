@@ -29,7 +29,7 @@ public interface LastFmApiGateway {
         } catch (LastFmException e) {
             throw e;
         } catch (JsonProcessingException e) {
-            throw new LastFmException(0, "Failed to parse API response for method: " + method, e);
+            throw new LastFmException(0, "Failed to parse API response for method: " + method + ": " + e.getMessage(), e);
         }
     }
 }

@@ -4,6 +4,7 @@ import io.github.rubeneekhof.lastfm.domain.model.Artist;
 import io.github.rubeneekhof.lastfm.domain.port.ArtistGateway;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ArtistService {
 
@@ -74,6 +75,11 @@ public class ArtistService {
                 request.autocorrect(),
                 request.limit()
         );
+    }
+
+    public Optional<Artist> getCorrection(String artist) {
+        validateArtistName(artist);
+        return gateway.getCorrection(artist);
     }
 
     private void validateArtistName(String artistName) {
