@@ -14,7 +14,6 @@ public interface LastFmApiGateway {
     default <T> T getAndParse(HttpExecutor http, ObjectMapper mapper, String method,
                               Map<String, String> params, Class<T> clazz) {
         try {
-            // Wrap HTTP call with retry logic for transient failures
             String body = RetryExecutor.execute(RetryPolicy.lastFmDefaults(), () -> {
                 try {
                     return http.get(method, params);
@@ -28,7 +27,7 @@ public interface LastFmApiGateway {
             
             return mapper.readValue(body, clazz);
         } catch (LastFmException e) {
-            throw e; // Re-throw LastFmException (may have been thrown by HttpExecutor or RetryExecutor)
+            throw e;
         } catch (JsonProcessingException e) {
             throw new LastFmException(0, "Failed to parse API response for method: " + method, e);
         }

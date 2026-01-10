@@ -25,17 +25,14 @@ public class RetryExecutor {
                 
                 LastFmFailure failure = LastFmErrorMapper.map(e.code(), e.getMessage());
                 
-                // Only retry transient failures
                 if (!(failure instanceof RateLimited) && !(failure instanceof ServiceUnavailable)) {
-                    throw e; // Don't retry for non-transient failures
+                    throw e;
                 }
                 
-                // On last attempt, throw immediately instead of retrying
                 if (attempt >= policy.maxAttempts()) {
                     throw e;
                 }
                 
-                // Calculate delay with exponential backoff: delay = initial * (multiplier ^ (attempt - 1))
                 long delayMs = (long) (policy.initialDelayMs() * Math.pow(policy.backoffMultiplier(), attempt - 1));
                 
                 try {
@@ -47,7 +44,6 @@ public class RetryExecutor {
             }
         }
         
-        // This should never be reached due to throw on last attempt, but handle it for safety
         if (lastException != null) {
             throw lastException;
         }

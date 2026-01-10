@@ -43,7 +43,6 @@ public class HttpExecutor {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         String body = response.body();
         
-        // Check for Last.fm API errors (can be returned with HTTP 200 or other status codes)
         try {
             JsonNode rootNode = objectMapper.readTree(body);
             if (rootNode.has("error") && !rootNode.get("error").isNull()) {
@@ -56,17 +55,13 @@ public class HttpExecutor {
                 }
             }
         } catch (LastFmException e) {
-            throw e; // Re-throw Last.fm API errors
+            throw e;
         } catch (Exception e) {
-            // If JSON parsing fails, check HTTP status code for common Last.fm errors
             if (response.statusCode() == 403) {
-                // HTTP 403 typically means invalid API key (error 10)
                 throw new LastFmException(10, "Invalid API key - You must be granted a valid key by last.fm");
             }
-            // If JSON parsing fails and not a known status code, continue to generic error handling
         }
 
-        // Only throw IOException if it's not a Last.fm API error (which was already thrown above)
         if (response.statusCode() != 200) {
             throw new IOException("HTTP error: " + response.statusCode());
         }
