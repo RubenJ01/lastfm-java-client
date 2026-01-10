@@ -103,7 +103,7 @@ Same pattern applies to all endpoints. When we add albums or tracks, they'll hav
 | **Geo** | `geo.getTopArtists` | ⏳ |
 | | `geo.getTopTracks` | ⏳ |
 | **Library** | `library.getArtists` | ⏳ |
-| **Tag** | `tag.getInfo` | ⏳ |
+| **Tag** | `tag.getInfo` | ✅ |
 | | `tag.getSimilar` | ⏳ |
 | | `tag.getTopAlbums` | ⏳ |
 | | `tag.getTopArtists` | ⏳ |
