@@ -14,8 +14,8 @@ public class LastFmClient {
     }
 
     public static LastFmClient create(String apiKey) {
-        HttpExecutor http = new HttpExecutor(apiKey);
         ObjectMapper mapper = new ObjectMapper();
+        HttpExecutor http = new HttpExecutor(apiKey, mapper);
         ArtistGatewayImpl artistGateway = new ArtistGatewayImpl(http, mapper);
 
         ArtistService artistService = new ArtistService(artistGateway);

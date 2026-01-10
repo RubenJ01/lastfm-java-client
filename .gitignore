@@ -6,7 +6,7 @@ target/
 src/main/java/io/github/rubeneekhof/lastfm/Main.java
 
 ### IntelliJ IDEA ###
-.idea\
+.idea/
 *.iws
 *.iml
 *.ipr
