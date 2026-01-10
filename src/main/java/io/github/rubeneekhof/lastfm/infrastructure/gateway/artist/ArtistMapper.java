@@ -32,7 +32,8 @@ public class ArtistMapper {
                 mapStats(data.stats),
                 mapSimilar(data.similar),
                 mapTags(data.tags),
-                mapBio(data.bio)
+                mapBio(data.bio),
+                null
         );
     }
 
@@ -53,7 +54,8 @@ public class ArtistMapper {
                 null,
                 List.of(),
                 List.of(),
-                null
+                null,
+                data.match
         );
     }
 
@@ -88,6 +90,7 @@ public class ArtistMapper {
                 null,
                 List.of(),
                 List.of(),
+                null,
                 null
         );
     }

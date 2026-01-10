@@ -42,13 +42,38 @@ public class ArtistService {
     }
 
     public List<Artist> getSimilar(String artistName) {
-        return getSimilar(artistName, DEFAULT_AUTOCORRECT, DEFAULT_LIMIT);
+        validateArtistName(artistName);
+        return getSimilar(ArtistGetSimilarRequest.artist(artistName)
+                .autocorrect(DEFAULT_AUTOCORRECT)
+                .limit(DEFAULT_LIMIT)
+                .build());
+    }
+
+    public List<Artist> getSimilar(String artistName, int limit) {
+        validateArtistName(artistName);
+        validateLimit(limit);
+        return getSimilar(ArtistGetSimilarRequest.artist(artistName)
+                .autocorrect(DEFAULT_AUTOCORRECT)
+                .limit(limit)
+                .build());
     }
 
     public List<Artist> getSimilar(String artistName, boolean autocorrect, int limit) {
         validateArtistName(artistName);
         validateLimit(limit);
-        return gateway.getSimilar(artistName, autocorrect, limit);
+        return getSimilar(ArtistGetSimilarRequest.artist(artistName)
+                .autocorrect(autocorrect)
+                .limit(limit)
+                .build());
+    }
+
+    public List<Artist> getSimilar(ArtistGetSimilarRequest request) {
+        return gateway.getSimilar(
+                request.artist(),
+                request.mbid(),
+                request.autocorrect(),
+                request.limit()
+        );
     }
 
     private void validateArtistName(String artistName) {

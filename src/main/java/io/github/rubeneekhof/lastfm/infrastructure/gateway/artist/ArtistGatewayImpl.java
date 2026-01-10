@@ -57,16 +57,27 @@ public class ArtistGatewayImpl implements ArtistGateway {
     }
 
     @Override
-    public List<Artist> getSimilar(String artistName, boolean autocorrect, int limit) {
+    public List<Artist> getSimilar(String artist, String mbid, Boolean autocorrect, Integer limit) {
+        Map<String, String> params = new HashMap<>();
+
+        if (artist != null) {
+            params.put("artist", artist);
+        }
+        if (mbid != null) {
+            params.put("mbid", mbid);
+        }
+        if (autocorrect != null) {
+            params.put("autocorrect", autocorrect ? "1" : "0");
+        }
+        if (limit != null) {
+            params.put("limit", String.valueOf(limit));
+        }
+
         GetSimilarResponse response = getAndParse(
                 http,
                 mapper,
                 "artist.getsimilar",
-                Map.of(
-                        "artist", artistName,
-                        "autocorrect", String.valueOf(autocorrect),
-                        "limit", String.valueOf(limit)
-                ),
+                params,
                 GetSimilarResponse.class
         );
         return ArtistMapper.from(response);

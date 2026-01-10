@@ -11,7 +11,8 @@ public record Artist(
         Stats stats,
         List<Artist> similar,
         List<Tag> tags,
-        Bio bio
+        Bio bio,
+        Double match
 ) {
     public record Image(String size, String url) {
         @Override
@@ -63,6 +64,9 @@ public record Artist(
         sb.append("    ],\n");
 
         sb.append("    stats: ").append(stats != null ? stats : "null").append(",\n");
+        if (match != null) {
+            sb.append("    match: ").append(match).append(",\n");
+        }
 
         sb.append("    similar: [\n");
         if (similar != null) {

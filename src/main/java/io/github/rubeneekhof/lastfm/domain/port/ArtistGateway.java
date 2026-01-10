@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ArtistGateway extends LastFmApiGateway {
     Artist getInfo(String artist, String mbid, String lang, Boolean autocorrect, String username);
-    List<Artist> getSimilar(String artist, boolean autocorrect, int limit);
+    List<Artist> getSimilar(String artist, String mbid, Boolean autocorrect, Integer limit);
 }
