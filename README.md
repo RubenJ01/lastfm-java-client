@@ -1,6 +1,6 @@
 # LastFM Java Client
 
-Create a client and start making requests:
+Create a client and start making requestsss:
 
 ````java
 import io.github.rubeneekhof.lastfm.api.LastFmClient;
