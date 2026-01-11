@@ -9,7 +9,7 @@ public class LastFmException extends RuntimeException {
 
   public LastFmException(int code, String message) {
     super(message);
-    this.code = code;
+                 this.code = code;
   }
 
   public LastFmException(int code, String message, Throwable cause) {
