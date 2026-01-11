@@ -3,7 +3,6 @@ package io.github.rubeneekhof.lastfm.infrastructure.http;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -16,61 +15,63 @@ import java.util.stream.Collectors;
 
 public class HttpExecutor {
 
-    private static final String BASE_URL = "https://ws.audioscrobbler.com/2.0/";
-    private final String apiKey;
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+  private static final String BASE_URL = "https://ws.audioscrobbler.com/2.0/";
+  private final String apiKey;
+  private final HttpClient httpClient;
+  private final ObjectMapper objectMapper;
 
-    public HttpExecutor(String apiKey, ObjectMapper objectMapper) {
-        this.apiKey = apiKey;
-        this.httpClient = HttpClient.newHttpClient();
-        this.objectMapper = objectMapper;
+  public HttpExecutor(String apiKey, ObjectMapper objectMapper) {
+    this.apiKey = apiKey;
+    this.httpClient = HttpClient.newHttpClient();
+    this.objectMapper = objectMapper;
+  }
+
+  public String get(String method, Map<String, String> params)
+      throws IOException, InterruptedException {
+    String query =
+        params.entrySet().stream()
+            .map(
+                e ->
+                    URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8)
+                        + "="
+                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
+            .collect(Collectors.joining("&"));
+
+    String url = BASE_URL + "?method=" + method + "&api_key=" + apiKey + "&format=json&" + query;
+
+    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    String body = response.body();
+
+    // Uncomment below for testing/debugging to log JSON responses:
+    // System.out.println("=== JSON Response for " + method + " ===");
+    // System.out.println(body);
+    // System.out.println("=== End JSON Response ===");
+
+    try {
+      JsonNode rootNode = objectMapper.readTree(body);
+      if (rootNode.has("error") && !rootNode.get("error").isNull()) {
+        int errorCode = rootNode.get("error").asInt();
+        if (errorCode != 0) {
+          String message =
+              rootNode.has("message") ? rootNode.get("message").asText() : "Unknown error";
+          throw new LastFmException(errorCode, message);
+        }
+      }
+    } catch (LastFmException e) {
+      throw e;
+    } catch (Exception e) {
+      if (response.statusCode() == 403) {
+        throw new LastFmException(
+            10, "Invalid API key - You must be granted a valid key by last.fm");
+      }
     }
 
-    public String get(String method, Map<String, String> params) throws IOException, InterruptedException {
-        String query = params.entrySet().stream()
-                .map(e -> URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8) + "=" +
-                        URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
-                .collect(Collectors.joining("&"));
-
-        String url = BASE_URL + "?method=" + method + "&api_key=" + apiKey + "&format=json&" + query;
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        String body = response.body();
-        
-        // Uncomment below for testing/debugging to log JSON responses:
-        // System.out.println("=== JSON Response for " + method + " ===");
-        // System.out.println(body);
-        // System.out.println("=== End JSON Response ===");
-        
-        try {
-            JsonNode rootNode = objectMapper.readTree(body);
-            if (rootNode.has("error") && !rootNode.get("error").isNull()) {
-                int errorCode = rootNode.get("error").asInt();
-                if (errorCode != 0) {
-                    String message = rootNode.has("message") 
-                            ? rootNode.get("message").asText() 
-                            : "Unknown error";
-                    throw new LastFmException(errorCode, message);
-                }
-            }
-        } catch (LastFmException e) {
-            throw e;
-        } catch (Exception e) {
-            if (response.statusCode() == 403) {
-                throw new LastFmException(10, "Invalid API key - You must be granted a valid key by last.fm");
-            }
-        }
-
-        if (response.statusCode() != 200) {
-            throw new IOException("HTTP error: " + response.statusCode());
-        }
-
-        return body;
+    if (response.statusCode() != 200) {
+      throw new IOException("HTTP error: " + response.statusCode());
     }
+
+    return body;
+  }
 }

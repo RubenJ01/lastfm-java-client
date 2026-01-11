@@ -1,4 +1,3 @@
 package io.github.rubeneekhof.lastfm.domain.model.error;
 
-public record ServiceUnavailable() implements LastFmFailure {
-}
+public record ServiceUnavailable() implements LastFmFailure {}

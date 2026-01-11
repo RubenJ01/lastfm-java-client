@@ -15,59 +15,64 @@ import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 
 public class LastFmClient {
 
-    private final ArtistService artistService;
-    private final AlbumService albumService;
-    private final ChartService chartService;
-    private final LibraryService libraryService;
-    private final TagService tagService;
+  private final ArtistService artistService;
+  private final AlbumService albumService;
+  private final ChartService chartService;
+  private final LibraryService libraryService;
+  private final TagService tagService;
 
-    private LastFmClient(ArtistService artistService, AlbumService albumService, ChartService chartService, LibraryService libraryService, TagService tagService) {
-        this.artistService = artistService;
-        this.albumService = albumService;
-        this.chartService = chartService;
-        this.libraryService = libraryService;
-        this.tagService = tagService;
-    }
+  private LastFmClient(
+      ArtistService artistService,
+      AlbumService albumService,
+      ChartService chartService,
+      LibraryService libraryService,
+      TagService tagService) {
+    this.artistService = artistService;
+    this.albumService = albumService;
+    this.chartService = chartService;
+    this.libraryService = libraryService;
+    this.tagService = tagService;
+  }
 
-    public static LastFmClient create(String apiKey) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpExecutor http = new HttpExecutor(apiKey, mapper);
-        
-        ArtistGatewayImpl artistGateway = new ArtistGatewayImpl(http, mapper);
-        ArtistService artistService = new ArtistService(artistGateway);
+  public static LastFmClient create(String apiKey) {
+    ObjectMapper mapper = new ObjectMapper();
+    HttpExecutor http = new HttpExecutor(apiKey, mapper);
 
-        AlbumGatewayImpl albumGateway = new AlbumGatewayImpl(http, mapper);
-        AlbumService albumService = new AlbumService(albumGateway);
+    ArtistGatewayImpl artistGateway = new ArtistGatewayImpl(http, mapper);
+    ArtistService artistService = new ArtistService(artistGateway);
 
-        ChartGatewayImpl chartGateway = new ChartGatewayImpl(http, mapper);
-        ChartService chartService = new ChartService(chartGateway);
+    AlbumGatewayImpl albumGateway = new AlbumGatewayImpl(http, mapper);
+    AlbumService albumService = new AlbumService(albumGateway);
 
-        LibraryGatewayImpl libraryGateway = new LibraryGatewayImpl(http, mapper);
-        LibraryService libraryService = new LibraryService(libraryGateway);
+    ChartGatewayImpl chartGateway = new ChartGatewayImpl(http, mapper);
+    ChartService chartService = new ChartService(chartGateway);
 
-        TagGatewayImpl tagGateway = new TagGatewayImpl(http, mapper);
-        TagService tagService = new TagService(tagGateway);
+    LibraryGatewayImpl libraryGateway = new LibraryGatewayImpl(http, mapper);
+    LibraryService libraryService = new LibraryService(libraryGateway);
 
-        return new LastFmClient(artistService, albumService, chartService, libraryService, tagService);
-    }
+    TagGatewayImpl tagGateway = new TagGatewayImpl(http, mapper);
+    TagService tagService = new TagService(tagGateway);
 
-    public ArtistService artists() {
-        return artistService;
-    }
+    return new LastFmClient(artistService, albumService, chartService, libraryService, tagService);
+  }
 
-    public AlbumService albums() {
-        return albumService;
-    }
+  public ArtistService artists() {
+    return artistService;
+  }
 
-    public ChartService charts() {
-        return chartService;
-    }
+  public AlbumService albums() {
+    return albumService;
+  }
 
-    public LibraryService library() {
-        return libraryService;
-    }
+  public ChartService charts() {
+    return chartService;
+  }
 
-    public TagService tags() {
-        return tagService;
-    }
+  public LibraryService library() {
+    return libraryService;
+  }
+
+  public TagService tags() {
+    return tagService;
+  }
 }
