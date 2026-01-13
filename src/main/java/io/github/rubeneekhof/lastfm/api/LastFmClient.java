@@ -9,6 +9,7 @@ import io.github.rubeneekhof.lastfm.application.geo.GeoService;
 import io.github.rubeneekhof.lastfm.application.library.LibraryService;
 import io.github.rubeneekhof.lastfm.application.tag.TagService;
 import io.github.rubeneekhof.lastfm.application.track.TrackService;
+import io.github.rubeneekhof.lastfm.application.user.UserService;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.album.AlbumGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.ArtistGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.auth.AuthGatewayImpl;
@@ -17,6 +18,7 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.geo.GeoGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.library.LibraryGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.TagGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.TrackGatewayImpl;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.UserGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 
 public class LastFmClient {
@@ -29,6 +31,7 @@ public class LastFmClient {
   private final LibraryService libraryService;
   private final TagService tagService;
   private final TrackService trackService;
+  private final UserService userService;
 
   private LastFmClient(
       ArtistService artistService,
@@ -38,7 +41,8 @@ public class LastFmClient {
       GeoService geoService,
       LibraryService libraryService,
       TagService tagService,
-      TrackService trackService) {
+      TrackService trackService,
+      UserService userService) {
     this.artistService = artistService;
     this.albumService = albumService;
     this.authService = authService;
@@ -47,6 +51,7 @@ public class LastFmClient {
     this.libraryService = libraryService;
     this.tagService = tagService;
     this.trackService = trackService;
+    this.userService = userService;
   }
 
   public static LastFmClient create(String apiKey) {
@@ -64,6 +69,7 @@ public class LastFmClient {
     LibraryService libraryService = new LibraryService(new LibraryGatewayImpl(http, mapper));
     TagService tagService = new TagService(new TagGatewayImpl(http, mapper));
     TrackService trackService = new TrackService(new TrackGatewayImpl(http, mapper));
+    UserService userService = new UserService(new UserGatewayImpl(http, mapper));
 
     AuthService authService = null;
     if (apiSecret != null) {
@@ -78,7 +84,8 @@ public class LastFmClient {
         geoService,
         libraryService,
         tagService,
-        trackService);
+        trackService,
+        userService);
   }
 
   public static LastFmClient createAuthenticated(
@@ -95,6 +102,7 @@ public class LastFmClient {
     AuthService authService = new AuthService(new AuthGatewayImpl(http, mapper, apiSecret));
     TrackService trackService =
         new TrackService(new TrackGatewayImpl(http, mapper, apiSecret, sessionKey));
+    UserService userService = new UserService(new UserGatewayImpl(http, mapper));
 
     return new LastFmClient(
         artistService,
@@ -104,7 +112,8 @@ public class LastFmClient {
         geoService,
         libraryService,
         tagService,
-        trackService);
+        trackService,
+        userService);
   }
 
   public ArtistService artists() {
@@ -137,5 +146,9 @@ public class LastFmClient {
 
   public TrackService tracks() {
     return trackService;
+  }
+
+  public UserService users() {
+    return userService;
   }
 }
