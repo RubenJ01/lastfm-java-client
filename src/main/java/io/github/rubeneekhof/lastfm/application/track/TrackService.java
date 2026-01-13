@@ -46,7 +46,11 @@ public class TrackService {
 
   public Track getInfo(TrackGetInfoRequest request) {
     return gateway.getInfo(
-        request.artist(), request.track(), request.mbid(), request.autocorrect(), request.username());
+        request.artist(),
+        request.track(),
+        request.mbid(),
+        request.autocorrect(),
+        request.username());
   }
 
   public ScrobbleResponse scrobble(Scrobble scrobble) {

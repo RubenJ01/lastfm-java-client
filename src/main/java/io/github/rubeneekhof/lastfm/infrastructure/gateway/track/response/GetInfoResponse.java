@@ -59,7 +59,8 @@ public class GetInfoResponse {
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class Image implements io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseImageResponse {
+  public static class Image
+      implements io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseImageResponse {
     public String size;
 
     @JsonProperty("#text")

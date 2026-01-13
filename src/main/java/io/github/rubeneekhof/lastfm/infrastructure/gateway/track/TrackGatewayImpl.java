@@ -3,10 +3,10 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.Scrobble;
 import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse;
+import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailureException;
 import io.github.rubeneekhof.lastfm.domain.port.TrackGateway;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
-import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.LastFmErrorMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.ParameterBuilder;
@@ -126,7 +126,8 @@ public class TrackGatewayImpl extends BaseGatewayImpl implements TrackGateway {
   }
 
   @Override
-  public Track getInfo(String artist, String track, String mbid, Boolean autocorrect, String username) {
+  public Track getInfo(
+      String artist, String track, String mbid, Boolean autocorrect, String username) {
     Map<String, String> params =
         ParameterBuilder.create()
             .put("artist", artist)

@@ -20,8 +20,8 @@ public class TrackMapper extends BaseMapper {
       return new io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse(0, 0, List.of());
     }
 
-        int accepted = parseInt(response.scrobbles.accepted, 0);
-        int ignored = parseInt(response.scrobbles.ignored, 0);
+    int accepted = parseInt(response.scrobbles.accepted, 0);
+    int ignored = parseInt(response.scrobbles.ignored, 0);
 
     List<ScrobbleResult> results = parseScrobbles(response.scrobbles.scrobble);
 
@@ -239,9 +239,7 @@ public class TrackMapper extends BaseMapper {
     if (toptags == null || toptags.tag == null) {
       return List.of();
     }
-    return toptags.tag.stream()
-        .map(tag -> new Track.Tag(tag.name, tag.url))
-        .toList();
+    return toptags.tag.stream().map(tag -> new Track.Tag(tag.name, tag.url)).toList();
   }
 
   private static Track.Wiki mapWiki(GetInfoResponse.Wiki wiki) {
