@@ -3,7 +3,7 @@ name: Spotless Autoformat
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   spotless:
