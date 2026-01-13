@@ -7,9 +7,11 @@ import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
 import io.github.rubeneekhof.lastfm.domain.port.TagGateway;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.ParameterBuilder;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TopTag;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopAlbumsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopArtistsResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopTagsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +57,15 @@ public class TagGatewayImpl extends BaseGatewayImpl implements TagGateway {
 
     GetTopArtistsResponse response =
         executeWithErrorHandling("tag.gettopartists", params, GetTopArtistsResponse.class);
+    return TagMapper.from(response);
+  }
+
+  @Override
+  public List<TopTag> getTopTags() {
+    Map<String, String> params = ParameterBuilder.create().build();
+
+    GetTopTagsResponse response =
+        executeWithErrorHandling("tag.getTopTags", params, GetTopTagsResponse.class);
     return TagMapper.from(response);
   }
 }

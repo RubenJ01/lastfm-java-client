@@ -3,6 +3,7 @@ package io.github.rubeneekhof.lastfm.application.tag;
 import io.github.rubeneekhof.lastfm.domain.model.tag.Tag;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TagAlbum;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TopTag;
 import io.github.rubeneekhof.lastfm.domain.port.TagGateway;
 import java.util.List;
 
@@ -75,6 +76,10 @@ public class TagService {
 
   public List<TagArtist> getTopArtists(TagGetTopArtistsRequest request) {
     return gateway.getTopArtists(request.tag(), request.limit(), request.page());
+  }
+
+  public List<TopTag> getTopTags() {
+    return gateway.getTopTags();
   }
 
   private void validateTagName(String tagName) {
