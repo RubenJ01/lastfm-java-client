@@ -26,6 +26,10 @@ public class HttpExecutor {
     this.objectMapper = objectMapper;
   }
 
+  public String getApiKey() {
+    return apiKey;
+  }
+
   public String get(String method, Map<String, String> params)
       throws IOException, InterruptedException {
     String query =
@@ -41,13 +45,38 @@ public class HttpExecutor {
 
     HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
+    return executeRequest(request);
+  }
+
+  public String post(String method, Map<String, String> params)
+      throws IOException, InterruptedException {
+    Map<String, String> allParams = new java.util.HashMap<>(params);
+    allParams.put("method", method);
+    allParams.put("api_key", apiKey);
+    allParams.put("format", "json");
+
+    String formData =
+        allParams.entrySet().stream()
+            .map(
+                e ->
+                    URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8)
+                        + "="
+                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
+            .collect(Collectors.joining("&"));
+
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL))
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .POST(HttpRequest.BodyPublishers.ofString(formData, StandardCharsets.UTF_8))
+            .build();
+
+    return executeRequest(request);
+  }
+
+  private String executeRequest(HttpRequest request) throws IOException, InterruptedException {
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     String body = response.body();
-
-    // Uncomment below for testing/debugging to log JSON responses:
-    // System.out.println("=== JSON Response for " + method + " ===");
-    // System.out.println(body);
-    // System.out.println("=== End JSON Response ===");
 
     try {
       JsonNode rootNode = objectMapper.readTree(body);

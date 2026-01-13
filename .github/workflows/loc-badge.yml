@@ -1,0 +1,32 @@
+name: Lines of Code Badge
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  generate-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Make Code Badge
+        uses: shadowmoose/GHA-LoC-Badge@1.0.0
+        with:
+          directory: .
+          badge: badge.svg
+          patterns: '**/*.java'
+          ignore: 'target|.git|.github'
+
+      - name: Push badge to badges branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: badges
+          destination_dir: .

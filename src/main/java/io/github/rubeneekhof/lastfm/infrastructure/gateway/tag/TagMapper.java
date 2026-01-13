@@ -1,9 +1,15 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.tag;
 
-import io.github.rubeneekhof.lastfm.domain.model.Tag;
+import io.github.rubeneekhof.lastfm.domain.model.tag.Tag;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TagAlbum;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetInfoResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopAlbumsResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopArtistsResponse;
+import java.util.List;
 
-public class TagMapper {
+public class TagMapper extends BaseMapper {
 
   public static Tag from(GetInfoResponse response) {
     if (response == null || response.tag == null) {
@@ -15,32 +21,48 @@ public class TagMapper {
         data.name, data.url, parseNumber(data.reach), parseNumber(data.total), mapWiki(data.wiki));
   }
 
-  private static int parseNumber(Object value) {
-    if (value == null) {
-      return 0;
+  public static List<TagAlbum> from(GetTopAlbumsResponse response) {
+    if (response == null || response.albums == null || response.albums.album == null) {
+      return List.of();
     }
 
-    if (value instanceof Number) {
-      return ((Number) value).intValue();
+    return response.albums.album.stream().map(TagMapper::from).toList();
+  }
+
+  public static List<TagArtist> from(GetTopArtistsResponse response) {
+    if (response == null || response.topartists == null || response.topartists.artist == null) {
+      return List.of();
     }
 
-    if (value instanceof String) {
-      String str = (String) value;
-      if (str.isBlank()) {
-        return 0;
-      }
-      try {
-        return Integer.parseInt(str);
-      } catch (NumberFormatException e) {
-        try {
-          return (int) Double.parseDouble(str);
-        } catch (NumberFormatException ex) {
-          return 0;
-        }
-      }
+    return response.topartists.artist.stream().map(TagMapper::from).toList();
+  }
+
+  private static TagArtist from(GetTopArtistsResponse.ArtistData data) {
+    if (data == null) {
+      return null;
     }
 
-    return 0;
+    return new TagArtist(
+        data.name,
+        data.mbid,
+        data.url,
+        data.streamable,
+        mapImages(data.image, img -> new TagArtist.Image(img.getSize(), img.getUrl())),
+        Integer.parseInt(data.attr.rank));
+  }
+
+  private static TagAlbum from(GetTopAlbumsResponse.AlbumData data) {
+    if (data == null) {
+      return null;
+    }
+
+    return new TagAlbum(
+        data.name,
+        data.mbid,
+        data.url,
+        new TagAlbum.Artist(data.artist.name, data.artist.mbid, data.artist.url),
+        mapImages(data.image, img -> new TagAlbum.Image(img.getSize(), img.getUrl())),
+        Integer.parseInt(data.attr.rank));
   }
 
   private static Tag.Wiki mapWiki(GetInfoResponse.Wiki wiki) {

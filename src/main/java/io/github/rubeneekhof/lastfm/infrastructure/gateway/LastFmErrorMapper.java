@@ -10,11 +10,11 @@ public class LastFmErrorMapper {
 
   public static LastFmFailure map(int code, String message) {
     return switch (code) {
-      case 4, 9, 10, 26 -> new Unauthorized();
+      case 4, 9, 10, 26 -> new Unauthorized(message);
       case 6, 7, 13 -> new InvalidRequest(message);
       case 2, 3, 5 -> new InvalidRequest("API misconfiguration");
-      case 11, 16 -> new ServiceUnavailable();
-      case 29 -> new RateLimited();
+      case 11, 16 -> new ServiceUnavailable(message);
+      case 29 -> new RateLimited(message);
       default -> new UnknownFailure(message != null ? message : "Unknown error");
     };
   }

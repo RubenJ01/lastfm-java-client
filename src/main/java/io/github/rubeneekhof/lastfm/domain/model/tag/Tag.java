@@ -1,4 +1,4 @@
-package io.github.rubeneekhof.lastfm.domain.model;
+package io.github.rubeneekhof.lastfm.domain.model.tag;
 
 public record Tag(String name, String url, int reach, int taggings, Wiki wiki) {
   public record Wiki(String published, String summary, String content) {
