@@ -1,12 +1,13 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.album;
 
 import io.github.rubeneekhof.lastfm.domain.model.Album;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.album.response.GetInfoResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class AlbumMapper {
+public class AlbumMapper extends BaseMapper {
 
   public static Album from(GetInfoResponse response) {
     if (response == null || response.album == null) {
@@ -52,8 +53,7 @@ public class AlbumMapper {
       if (userplaycount != null) {
         if (userplaycount instanceof Number) {
           userPlays = ((Number) userplaycount).intValue();
-        } else if (userplaycount instanceof String) {
-          String userPlayStr = (String) userplaycount;
+        } else if (userplaycount instanceof String userPlayStr) {
           if (!userPlayStr.isBlank()) {
             userPlays = parseNumber(userPlayStr);
           }
@@ -62,21 +62,6 @@ public class AlbumMapper {
       return new Album.Stats(listenersCount, plays, userPlays);
     } catch (NumberFormatException e) {
       return new Album.Stats(0, 0, null);
-    }
-  }
-
-  private static int parseNumber(String value) {
-    if (value == null || value.isBlank()) {
-      return 0;
-    }
-    try {
-      return Integer.parseInt(value);
-    } catch (NumberFormatException e) {
-      try {
-        return (int) Double.parseDouble(value);
-      } catch (NumberFormatException ex) {
-        return 0;
-      }
     }
   }
 

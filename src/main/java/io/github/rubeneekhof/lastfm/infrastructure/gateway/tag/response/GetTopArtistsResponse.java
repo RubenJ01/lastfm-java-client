@@ -6,16 +6,16 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseImageResponse;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetTopAlbumsResponse {
+public class GetTopArtistsResponse {
 
-  public Albums albums;
+  public Artists topartists;
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class Albums {
+  public static class Artists {
     @JsonProperty("@attr")
     public Attr attr;
 
-    public List<AlbumData> album;
+    public List<ArtistData> artist;
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,22 +28,15 @@ public class GetTopAlbumsResponse {
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class AlbumData {
+  public static class ArtistData {
     public String name;
     public String mbid;
     public String url;
-    public Artist artist;
+    public String streamable;
     public List<Image> image;
 
     @JsonProperty("@attr")
-    public AlbumDataAttr attr;
-  }
-
-  @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class Artist {
-    public String name;
-    public String mbid;
-    public String url;
+    public ArtistDataAttr attr;
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
@@ -65,7 +58,7 @@ public class GetTopAlbumsResponse {
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class AlbumDataAttr {
+  public static class ArtistDataAttr {
     public String rank;
   }
 }
