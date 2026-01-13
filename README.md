@@ -261,7 +261,7 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `track.unlove` | ⏳ |
 | | `track.updateNowPlaying` | ⏳ |
 | **User** | `user.getFriends` | ⏳ |
-| | `user.getInfo` | ⏳ |
+| | `user.getInfo` | ✅ |
 | | `user.getLovedTracks` | ⏳ |
 | | `user.getPersonalTags` | ⏳ |
 | | `user.getRecentTracks` | ⏳ |
