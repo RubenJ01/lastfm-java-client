@@ -78,6 +78,140 @@ var artist = client.artists().getInfo(
 
 Same pattern applies to all endpoints. When we add albums or tracks, they'll have their own builders like `AlbumGetInfoRequest`, `TrackGetInfoRequest`, etc.
 
+## Authentication
+
+Some Last.fm API endpoints require authentication (like `track.scrobble`). The authentication process involves three steps:
+
+### Step 1: Get a Token
+
+First, create a client with your API key and secret, then request a token:
+
+````java
+String apiKey = "your-api-key";
+String apiSecret = "your-api-secret";
+
+LastFmClient client = LastFmClient.create(apiKey, apiSecret);
+String token = client.auth().getToken();
+````
+
+### Step 2: Authorize the Token
+
+Generate the authorization URL and visit it in your browser to grant permission:
+
+````java
+String authUrl = client.auth().getAuthorizationUrl(apiKey, token);
+System.out.println("Visit this URL to authorize: " + authUrl);
+````
+
+After granting permission, you'll see a success page. **Important:** Tokens are valid for 60 minutes and can only be used once.
+
+### Step 3: Get a Session Key
+
+Once the token is authorized, exchange it for a session key:
+
+````java
+Session session = client.auth().getSession(token);
+String sessionKey = session.key();
+````
+
+**Session keys don't expire!** Save your session key and reuse it for all future authenticated requests. You only need to go through the token authorization process once.
+
+### Using Authenticated Endpoints
+
+Once you have a session key, create an authenticated client:
+
+````java
+LastFmClient authenticatedClient = LastFmClient.createAuthenticated(
+    apiKey, 
+    apiSecret, 
+    sessionKey
+);
+````
+
+This client can now use authenticated endpoints like `track.scrobble`.
+
+## Scrobbling
+
+Scrobbling is the process of recording that you've listened to a track. The `track.scrobble` endpoint allows you to submit scrobbles to Last.fm.
+
+### Basic Scrobbling
+
+The minimum required information is artist, track, and timestamp:
+
+````java
+import io.github.rubeneekhof.lastfm.domain.model.Scrobble;
+
+// Create an authenticated client first
+LastFmClient client = LastFmClient.createAuthenticated(apiKey, apiSecret, sessionKey);
+
+// Scrobble a single track
+long timestamp = System.currentTimeMillis() / 1000 - 60; // 1 minute ago
+Scrobble scrobble = Scrobble.builder()
+    .artist("Radiohead")
+    .track("Creep")
+    .timestamp(timestamp)
+    .build();
+
+ScrobbleResponse response = client.tracks().scrobble(scrobble);
+System.out.println("Accepted: " + response.accepted() + ", Ignored: " + response.ignored());
+````
+
+### Scrobbling with Optional Parameters
+
+You can include additional information like album, track number, duration, etc.:
+
+````java
+Scrobble scrobble = Scrobble.builder()
+    .artist("The Beatles")
+    .track("Hey Jude")
+    .timestamp(System.currentTimeMillis() / 1000 - 120) // 2 minutes ago
+    .album("The Beatles 1967-1970")
+    .albumArtist("The Beatles")
+    .mbid("b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d")
+    .trackNumber(1)
+    .duration(431) // seconds
+    .chosenByUser(true)
+    .build();
+
+ScrobbleResponse response = client.tracks().scrobble(scrobble);
+````
+
+### Batch Scrobbling
+
+You can scrobble up to 50 tracks in a single request:
+
+````java
+import io.github.rubeneekhof.lastfm.application.track.TrackScrobbleRequest;
+
+Scrobble scrobble1 = Scrobble.builder()
+    .artist("Daft Punk")
+    .track("One More Time")
+    .timestamp(baseTimestamp)
+    .album("Discovery")
+    .build();
+
+Scrobble scrobble2 = Scrobble.builder()
+    .artist("Daft Punk")
+    .track("Harder, Better, Faster, Stronger")
+    .timestamp(baseTimestamp - 60)
+    .album("Discovery")
+    .build();
+
+TrackScrobbleRequest batch = TrackScrobbleRequest.builder()
+    .addScrobble(scrobble1)
+    .addScrobble(scrobble2)
+    .build();
+
+ScrobbleResponse response = client.tracks().scrobble(batch);
+````
+
+### Important Notes About Scrobbling
+
+- **Timestamps**: Must be in UNIX timestamp format (seconds since epoch). Timestamps that are too old (more than ~14 days) or too new (in the future) will be ignored.
+- **Accepted vs Ignored**: The response includes counts of accepted and ignored scrobbles. Check `response.results()` to see details about each scrobble, including ignored message codes.
+- **Rate Limits**: Be mindful of Last.fm's rate limits when scrobbling multiple tracks.
+- **Session Key**: You must use an authenticated client with a valid session key. Session keys don't expire, so save yours after the first authentication.
+
 ## API Coverage
 
 | Category | Method | Status |
@@ -99,12 +233,12 @@ Same pattern applies to all endpoints. When we add albums or tracks, they'll hav
 | | `artist.removeTag` | ⏳ |
 | | `artist.search` | ⏳ |
 | **Auth** | `auth.getMobileSession` | ⏳ |
-| | `auth.getSession` | ⏳ |
-| | `auth.getToken` | ⏳ |
+| | `auth.getSession` | ✅ |
+| | `auth.getToken` | ✅ |
 | **Chart** | `chart.getTopArtists` | ✅ |
 | | `chart.getTopTags` | ⏳ |
 | | `chart.getTopTracks` | ⏳ |
-| **Geo** | `geo.getTopArtists` | ⏳ |
+| **Geo** | `geo.getTopArtists` | ✅ |
 | | `geo.getTopTracks` | ⏳ |
 | **Library** | `library.getArtists` | ✅ |
 | **Tag** | `tag.getInfo` | ✅ |
@@ -122,7 +256,7 @@ Same pattern applies to all endpoints. When we add albums or tracks, they'll hav
 | | `track.getTopTags` | ⏳ |
 | | `track.love` | ⏳ |
 | | `track.removeTag` | ⏳ |
-| | `track.scrobble` | ⏳ |
+| | `track.scrobble` | ✅ |
 | | `track.search` | ⏳ |
 | | `track.unlove` | ⏳ |
 | | `track.updateNowPlaying` | ⏳ |
