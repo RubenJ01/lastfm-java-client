@@ -105,7 +105,7 @@ Same pattern applies to all endpoints. When we add albums or tracks, they'll hav
 | **Library** | `library.getArtists` | ✅ |
 | **Tag** | `tag.getInfo` | ✅ |
 | | `tag.getSimilar` | ⏳ |
-| | `tag.getTopAlbums` | ⏳ |
+| | `tag.getTopAlbums` | ✅ |
 | | `tag.getTopArtists` | ⏳ |
 | | `tag.getTopTags` | ⏳ |
 | | `tag.getTopTracks` | ⏳ |
