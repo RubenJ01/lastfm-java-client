@@ -1,5 +1,8 @@
 # LastFM Java Client
 
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Maven](https://img.shields.io/badge/Maven-3.9+-orange)
+
 Create a client and start making requests:
 
 ````java
