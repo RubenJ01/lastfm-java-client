@@ -45,9 +45,9 @@ public class HttpExecutor {
     String body = response.body();
 
     // Uncomment below for testing/debugging to log JSON responses:
-    // System.out.println("=== JSON Response for " + method + " ===");
-    // System.out.println(body);
-    // System.out.println("=== End JSON Response ===");
+    //     System.out.println("=== JSON Response for " + method + " ===");
+    //     System.out.println(body);
+    //     System.out.println("=== End JSON Response ===");
 
     try {
       JsonNode rootNode = objectMapper.readTree(body);

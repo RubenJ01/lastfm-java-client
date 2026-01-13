@@ -1,11 +1,12 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.library;
 
 import io.github.rubeneekhof.lastfm.domain.model.LibraryArtist;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.library.response.GetArtistsResponse;
 import java.util.List;
 import java.util.Optional;
 
-public class LibraryMapper {
+public class LibraryMapper extends BaseMapper {
 
   public static List<LibraryArtist> from(GetArtistsResponse response) {
     if (response == null || response.artists == null || response.artists.artist == null) {
@@ -61,33 +62,5 @@ public class LibraryMapper {
         .filter(list -> !list.isEmpty())
         .map(list -> list.stream().map(img -> new LibraryArtist.Image(img.size, img.url)).toList())
         .orElse(List.of());
-  }
-
-  private static int parseNumber(Object value) {
-    if (value == null) {
-      return 0;
-    }
-
-    if (value instanceof Number) {
-      return ((Number) value).intValue();
-    }
-
-    if (value instanceof String) {
-      String str = (String) value;
-      if (str.isBlank()) {
-        return 0;
-      }
-      try {
-        return Integer.parseInt(str);
-      } catch (NumberFormatException e) {
-        try {
-          return (int) Double.parseDouble(str);
-        } catch (NumberFormatException ex) {
-          return 0;
-        }
-      }
-    }
-
-    return 0;
   }
 }

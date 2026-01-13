@@ -1,13 +1,15 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.tag;
 
-import io.github.rubeneekhof.lastfm.domain.model.Tag;
-import io.github.rubeneekhof.lastfm.domain.model.TagAlbum;
+import io.github.rubeneekhof.lastfm.domain.model.tag.Tag;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TagAlbum;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopAlbumsResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopArtistsResponse;
 import java.util.List;
-import java.util.Optional;
 
-public class TagMapper {
+public class TagMapper extends BaseMapper {
 
   public static Tag from(GetInfoResponse response) {
     if (response == null || response.tag == null) {
@@ -27,6 +29,28 @@ public class TagMapper {
     return response.albums.album.stream().map(TagMapper::from).toList();
   }
 
+  public static List<TagArtist> from(GetTopArtistsResponse response) {
+    if (response == null || response.topartists == null || response.topartists.artist == null) {
+      return List.of();
+    }
+
+    return response.topartists.artist.stream().map(TagMapper::from).toList();
+  }
+
+  private static TagArtist from(GetTopArtistsResponse.ArtistData data) {
+    if (data == null) {
+      return null;
+    }
+
+    return new TagArtist(
+        data.name,
+        data.mbid,
+        data.url,
+        data.streamable,
+        mapImages(data.image, img -> new TagArtist.Image(img.getSize(), img.getUrl())),
+        Integer.parseInt(data.attr.rank));
+  }
+
   private static TagAlbum from(GetTopAlbumsResponse.AlbumData data) {
     if (data == null) {
       return null;
@@ -37,43 +61,8 @@ public class TagMapper {
         data.mbid,
         data.url,
         new TagAlbum.Artist(data.artist.name, data.artist.mbid, data.artist.url),
-        mapImages(data.image),
+        mapImages(data.image, img -> new TagAlbum.Image(img.getSize(), img.getUrl())),
         Integer.parseInt(data.attr.rank));
-  }
-
-  private static List<TagAlbum.Image> mapImages(List<GetTopAlbumsResponse.Image> images) {
-    return Optional.ofNullable(images)
-        .filter(list -> !list.isEmpty())
-        .map(list -> list.stream().map(img -> new TagAlbum.Image(img.size, img.url)).toList())
-        .orElse(List.of());
-  }
-
-  private static int parseNumber(Object value) {
-    if (value == null) {
-      return 0;
-    }
-
-    if (value instanceof Number) {
-      return ((Number) value).intValue();
-    }
-
-    if (value instanceof String) {
-      String str = (String) value;
-      if (str.isBlank()) {
-        return 0;
-      }
-      try {
-        return Integer.parseInt(str);
-      } catch (NumberFormatException e) {
-        try {
-          return (int) Double.parseDouble(str);
-        } catch (NumberFormatException ex) {
-          return 0;
-        }
-      }
-    }
-
-    return 0;
   }
 
   private static Tag.Wiki mapWiki(GetInfoResponse.Wiki wiki) {

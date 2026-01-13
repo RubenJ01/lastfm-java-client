@@ -1,14 +1,16 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.tag;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.Tag;
-import io.github.rubeneekhof.lastfm.domain.model.TagAlbum;
 import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailureException;
+import io.github.rubeneekhof.lastfm.domain.model.tag.Tag;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TagAlbum;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
 import io.github.rubeneekhof.lastfm.domain.port.TagGateway;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.LastFmErrorMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopAlbumsResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopArtistsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +59,28 @@ public class TagGatewayImpl implements TagGateway {
 
       GetTopAlbumsResponse response =
           getAndParse(http, mapper, "tag.gettopalbums", params, GetTopAlbumsResponse.class);
+
+      return TagMapper.from(response);
+    } catch (LastFmException e) {
+      throw new LastFmFailureException(LastFmErrorMapper.map(e.code(), e.getMessage()));
+    }
+  }
+
+  @Override
+  public List<TagArtist> getTopArtists(String tag, Integer limit, Integer page) {
+    try {
+      Map<String, String> params = new HashMap<>();
+      params.put("tag", tag);
+
+      if (page != null) {
+        params.put("page", String.valueOf(page));
+      }
+      if (limit != null) {
+        params.put("limit", String.valueOf(limit));
+      }
+
+      GetTopArtistsResponse response =
+          getAndParse(http, mapper, "tag.gettopartists", params, GetTopArtistsResponse.class);
 
       return TagMapper.from(response);
     } catch (LastFmException e) {
