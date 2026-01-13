@@ -3,10 +3,12 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.tag;
 import io.github.rubeneekhof.lastfm.domain.model.tag.Tag;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TagAlbum;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
+import io.github.rubeneekhof.lastfm.domain.model.tag.TopTag;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopAlbumsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopArtistsResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopTagsResponse;
 import java.util.List;
 
 public class TagMapper extends BaseMapper {
@@ -63,6 +65,34 @@ public class TagMapper extends BaseMapper {
         new TagAlbum.Artist(data.artist.name, data.artist.mbid, data.artist.url),
         mapImages(data.image, img -> new TagAlbum.Image(img.getSize(), img.getUrl())),
         Integer.parseInt(data.attr.rank));
+  }
+
+  public static List<TopTag> from(GetTopTagsResponse response) {
+        if (response == null || response.toptags == null || response.toptags.tag == null) {
+           return List.of();
+    }
+
+        return response.toptags.tag.stream().map(TagMapper::from).toList();
+  }
+
+  private static TopTag from(GetTopTagsResponse.TagData data) {
+    if (data == null) {
+      return null;
+    }
+
+    return new TopTag(
+        data.name, parseLong(data.count), parseLong(data.reach));
+  }
+
+  private static long parseLong(String value) {
+    if (value == null || value.isBlank()) {
+      return 0;
+    }
+    try {
+      return Long.parseLong(value);
+    } catch (NumberFormatException e) {
+      return 0;
+    }
   }
 
   private static Tag.Wiki mapWiki(GetInfoResponse.Wiki wiki) {
