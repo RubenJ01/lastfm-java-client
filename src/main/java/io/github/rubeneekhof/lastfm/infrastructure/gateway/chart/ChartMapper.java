@@ -25,20 +25,13 @@ public class ChartMapper extends BaseMapper {
         data.name,
         data.mbid,
         data.url,
-        mapImages(data.image),
+        mapImages(data.image, img -> new Artist.Image(img.getSize(), img.getUrl())),
         data.streamable,
         mapStats(data.playcount, data.listeners),
         List.of(),
         List.of(),
         null,
         null);
-  }
-
-  private static List<Artist.Image> mapImages(List<GetTopArtistsResponse.Image> images) {
-    return Optional.ofNullable(images)
-        .filter(list -> !list.isEmpty())
-        .map(list -> list.stream().map(img -> new Artist.Image(img.size, img.url)).toList())
-        .orElse(List.of());
   }
 
   private static Artist.Stats mapStats(String playcount, String listeners) {
