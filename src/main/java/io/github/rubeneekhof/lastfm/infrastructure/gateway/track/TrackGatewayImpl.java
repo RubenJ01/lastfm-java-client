@@ -3,11 +3,14 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.Scrobble;
 import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse;
+import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailureException;
 import io.github.rubeneekhof.lastfm.domain.port.TrackGateway;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.LastFmErrorMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.ParameterBuilder;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.ApiSignatureGenerator;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.io.IOException;
@@ -120,5 +123,22 @@ public class TrackGatewayImpl extends BaseGatewayImpl implements TrackGateway {
     if (scrobble.streamId() != null && !scrobble.streamId().isBlank()) {
       params.put(streamIdKey, scrobble.streamId());
     }
+  }
+
+  @Override
+  public Track getInfo(
+      String artist, String track, String mbid, Boolean autocorrect, String username) {
+    Map<String, String> params =
+        ParameterBuilder.create()
+            .put("artist", artist)
+            .put("track", track)
+            .put("mbid", mbid)
+            .put("autocorrect", autocorrect)
+            .put("username", username)
+            .build();
+
+    GetInfoResponse response =
+        executeWithErrorHandling("track.getInfo", params, GetInfoResponse.class);
+    return TrackMapper.from(response);
   }
 }

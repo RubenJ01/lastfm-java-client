@@ -68,11 +68,11 @@ public class TagMapper extends BaseMapper {
   }
 
   public static List<TopTag> from(GetTopTagsResponse response) {
-        if (response == null || response.toptags == null || response.toptags.tag == null) {
-           return List.of();
+    if (response == null || response.toptags == null || response.toptags.tag == null) {
+      return List.of();
     }
 
-        return response.toptags.tag.stream().map(TagMapper::from).toList();
+    return response.toptags.tag.stream().map(TagMapper::from).toList();
   }
 
   private static TopTag from(GetTopTagsResponse.TagData data) {
@@ -80,8 +80,7 @@ public class TagMapper extends BaseMapper {
       return null;
     }
 
-    return new TopTag(
-        data.name, parseLong(data.count), parseLong(data.reach));
+    return new TopTag(data.name, parseLong(data.count), parseLong(data.reach));
   }
 
   private static long parseLong(String value) {

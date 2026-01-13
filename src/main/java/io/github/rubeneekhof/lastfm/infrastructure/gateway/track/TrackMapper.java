@@ -2,12 +2,15 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResult;
+import io.github.rubeneekhof.lastfm.domain.model.Track;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.ScrobbleResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class TrackMapper {
+public class TrackMapper extends BaseMapper {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -137,5 +140,112 @@ public class TrackMapper {
     } catch (NumberFormatException e) {
       return defaultValue;
     }
+  }
+
+  public static Track from(GetInfoResponse response) {
+    if (response == null || response.track == null) {
+      return null;
+    }
+
+    GetInfoResponse.TrackData data = response.track;
+    return new Track(
+        data.name,
+        data.mbid,
+        data.url,
+        parseDuration(data.duration),
+        mapStreamable(data.streamable),
+        mapStats(data.listeners, data.playcount),
+        mapArtist(data.artist),
+        mapAlbum(data.album),
+        parseUserPlaycount(data.userplaycount),
+        parseUserLoved(data.userloved),
+        mapTags(data.toptags),
+        mapWiki(data.wiki));
+  }
+
+  private static Integer parseDuration(String duration) {
+    if (duration == null || duration.isBlank()) {
+      return null;
+    }
+    try {
+      return Integer.parseInt(duration);
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
+
+  private static Track.Streamable mapStreamable(GetInfoResponse.Streamable streamable) {
+    if (streamable == null) {
+      return null;
+    }
+    boolean text = "1".equals(streamable.text);
+    boolean fulltrack = "1".equals(streamable.fulltrack);
+    return new Track.Streamable(text, fulltrack);
+  }
+
+  private static Track.Stats mapStats(String listeners, String playcount) {
+    long listenersCount = parseLong(listeners, 0);
+    long plays = parseLong(playcount, 0);
+    return new Track.Stats(listenersCount, plays);
+  }
+
+  private static Track.Artist mapArtist(GetInfoResponse.TrackArtist artist) {
+    if (artist == null) {
+      return null;
+    }
+    return new Track.Artist(artist.name, artist.mbid, artist.url);
+  }
+
+  private static Track.Album mapAlbum(GetInfoResponse.TrackAlbum album) {
+    if (album == null) {
+      return null;
+    }
+    Integer position = null;
+    if (album.attr != null && album.attr.position != null) {
+      try {
+        position = Integer.parseInt(album.attr.position);
+      } catch (NumberFormatException e) {
+        // ignore
+      }
+    }
+    return new Track.Album(
+        album.artist,
+        album.title,
+        album.mbid,
+        album.url,
+        mapImages(album.image, img -> new Track.Album.Image(img.getSize(), img.getUrl())),
+        position);
+  }
+
+  private static Integer parseUserPlaycount(String userplaycount) {
+    if (userplaycount == null || userplaycount.isBlank()) {
+      return null;
+    }
+    try {
+      return Integer.parseInt(userplaycount);
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
+
+  private static Boolean parseUserLoved(String userloved) {
+    if (userloved == null || userloved.isBlank()) {
+      return null;
+    }
+    return "1".equals(userloved);
+  }
+
+  private static List<Track.Tag> mapTags(GetInfoResponse.TopTags toptags) {
+    if (toptags == null || toptags.tag == null) {
+      return List.of();
+    }
+    return toptags.tag.stream().map(tag -> new Track.Tag(tag.name, tag.url)).toList();
+  }
+
+  private static Track.Wiki mapWiki(GetInfoResponse.Wiki wiki) {
+    if (wiki == null) {
+      return null;
+    }
+    return new Track.Wiki(wiki.published, wiki.summary, wiki.content);
   }
 }
