@@ -20,8 +20,7 @@ public class GeoService {
 
   public List<Artist> getTopArtists(String country, int page) {
     validatePage(page);
-    return getTopArtists(
-        GeoGetTopArtistsRequest.builder().country(country).page(page).build());
+    return getTopArtists(GeoGetTopArtistsRequest.builder().country(country).page(page).build());
   }
 
   public List<Artist> getTopArtists(String country, int page, int limit) {

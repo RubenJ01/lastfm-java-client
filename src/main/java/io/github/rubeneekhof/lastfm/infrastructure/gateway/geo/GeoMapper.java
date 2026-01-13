@@ -8,9 +8,7 @@ import java.util.List;
 public class GeoMapper extends BaseMapper {
 
   public static List<Artist> from(GetTopArtistsResponse response) {
-    if (response == null
-        || response.topartists == null
-        || response.topartists.artist == null) {
+    if (response == null || response.topartists == null || response.topartists.artist == null) {
       return List.of();
     }
 
