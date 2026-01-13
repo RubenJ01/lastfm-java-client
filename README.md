@@ -250,7 +250,7 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `tag.getWeeklyChartList` | ⏳ |
 | **Track** | `track.addTags` | ⏳ |
 | | `track.getCorrection` | ⏳ |
-| | `track.getInfo` | ⏳ |
+| | `track.getInfo` | ✅ |
 | | `track.getSimilar` | ⏳ |
 | | `track.getTags` | ⏳ |
 | | `track.getTopTags` | ⏳ |
