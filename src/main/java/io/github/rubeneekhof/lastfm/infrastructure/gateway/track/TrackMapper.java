@@ -67,7 +67,7 @@ public class TrackMapper extends BaseMapper {
     String artist = getText(scrobble.artist);
     String album = getText(scrobble.album);
     String albumArtist = getText(scrobble.albumArtist);
-    long timestamp = parseLong(scrobble.timestamp, 0);
+    long timestamp = parseLong(scrobble.timestamp);
     boolean trackCorrected = "1".equals(getCorrected(scrobble.track));
     boolean artistCorrected = "1".equals(getCorrected(scrobble.artist));
     boolean albumCorrected = "1".equals(getCorrected(scrobble.album));
@@ -131,14 +131,14 @@ public class TrackMapper extends BaseMapper {
     }
   }
 
-  private static long parseLong(String value, long defaultValue) {
+  private static long parseLong(String value) {
     if (value == null || value.isBlank()) {
-      return defaultValue;
+      return 0;
     }
     try {
       return Long.parseLong(value);
     } catch (NumberFormatException e) {
-      return defaultValue;
+      return 0;
     }
   }
 
@@ -184,8 +184,8 @@ public class TrackMapper extends BaseMapper {
   }
 
   private static Track.Stats mapStats(String listeners, String playcount) {
-    long listenersCount = parseLong(listeners, 0);
-    long plays = parseLong(playcount, 0);
+    long listenersCount = parseLong(listeners);
+    long plays = parseLong(playcount);
     return new Track.Stats(listenersCount, plays);
   }
 
