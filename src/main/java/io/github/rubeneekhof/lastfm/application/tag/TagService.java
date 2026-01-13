@@ -18,6 +18,8 @@ public class TagService {
 
   public Tag getInfo(String tag, String lang) {
     validateTagName(tag);
+      System.out.println(1111111);
+      System.out.println("test");
     return getInfo(TagGetInfoRequest.tag(tag).lang(lang).build());
   }
 
