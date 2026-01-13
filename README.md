@@ -1,6 +1,10 @@
 # LastFM Java Client
 
-Create a client and start making requestsss:
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Maven](https://img.shields.io/badge/Maven-3.9+-orange)
+![Lines of Code](https://raw.githubusercontent.com/RubenJ01/lastfm-java-client/badges/badge.svg)
+
+Create a client and start making requests:
 
 ````java
 import io.github.rubeneekhof.lastfm.api.LastFmClient;
@@ -105,7 +109,7 @@ Same pattern applies to all endpoints. When we add albums or tracks, they'll hav
 | **Library** | `library.getArtists` | ✅ |
 | **Tag** | `tag.getInfo` | ✅ |
 | | `tag.getSimilar` | ⏳ |
-| | `tag.getTopAlbums` | ⏳ |
+| | `tag.getTopAlbums` | ✅ |
 | | `tag.getTopArtists` | ⏳ |
 | | `tag.getTopTags` | ⏳ |
 | | `tag.getTopTracks` | ⏳ |
