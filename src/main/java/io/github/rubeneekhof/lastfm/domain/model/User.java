@@ -20,15 +20,15 @@ public record User(
   public record Image(String size, String url) {
     @Override
     public String toString() {
-        return "Image { size: '" + size + "', url: '" + url + "' }";
+      return "Image { size: '" + size + "', url: '" + url + "' }";
     }
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-            sb.append("User {\n");
-                sb.append("    name: '").append(name).append("',\n");
+    sb.append("User {\n");
+    sb.append("    name: '").append(name).append("',\n");
     if (realname != null) {
       sb.append("    realname: '").append(realname).append("',\n");
     }

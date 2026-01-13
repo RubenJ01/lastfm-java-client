@@ -13,5 +13,5 @@ public interface TagGateway extends LastFmApiGateway {
 
   List<TagArtist> getTopArtists(String tag, Integer limit, Integer page);
 
-         List<TopTag> getTopTags();
+  List<TopTag> getTopTags();
 }
