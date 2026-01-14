@@ -1,10 +1,10 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
-import io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailureException;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse;
 import io.github.rubeneekhof.lastfm.domain.port.TrackGateway;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImpl;
