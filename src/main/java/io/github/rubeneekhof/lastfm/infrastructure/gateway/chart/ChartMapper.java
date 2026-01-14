@@ -4,7 +4,6 @@ import io.github.rubeneekhof.lastfm.domain.model.Artist;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.chart.response.GetTopArtistsResponse;
 import java.util.List;
-import java.util.Optional;
 
 public class ChartMapper extends BaseMapper {
 

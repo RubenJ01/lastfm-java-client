@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.Album;
 import io.github.rubeneekhof.lastfm.domain.port.AlbumGateway;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.ParameterBuilder;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.album.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.util.Map;

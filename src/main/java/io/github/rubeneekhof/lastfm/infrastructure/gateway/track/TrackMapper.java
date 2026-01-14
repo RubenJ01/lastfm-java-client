@@ -57,45 +57,38 @@ public class TrackMapper extends BaseMapper {
     return List.of();
   }
 
-    private static ScrobbleResult from(ScrobbleResponse.Scrobble scrobble) {
-        if (scrobble == null) {
-            return null;
-        }
-
-        String track = scrobble.track != null ? scrobble.track.text : null;
-        String artist = scrobble.artist != null ? scrobble.artist.text : null;
-        String album = scrobble.album != null ? scrobble.album.text : null;
-        String albumArtist = scrobble.albumArtist != null ? scrobble.albumArtist.text : null;
-
-        long timestamp = parseLong(scrobble.timestamp);
-
-        boolean trackCorrected =
-                scrobble.track != null && "1".equals(scrobble.track.corrected);
-        boolean artistCorrected =
-                scrobble.artist != null && "1".equals(scrobble.artist.corrected);
-        boolean albumCorrected =
-                scrobble.album != null && "1".equals(scrobble.album.corrected);
-        boolean albumArtistCorrected =
-                scrobble.albumArtist != null && "1".equals(scrobble.albumArtist.corrected);
-
-        int ignoredCode =
-                scrobble.ignoredMessage != null
-                        ? parseInt(scrobble.ignoredMessage.code)
-                        : 0;
-
-        return new ScrobbleResult(
-                track,
-                artist,
-                album,
-                albumArtist,
-                timestamp,
-                trackCorrected,
-                artistCorrected,
-                albumCorrected,
-                albumArtistCorrected,
-                ignoredCode
-        );
+  private static ScrobbleResult from(ScrobbleResponse.Scrobble scrobble) {
+    if (scrobble == null) {
+      return null;
     }
+
+    String track = scrobble.track != null ? scrobble.track.text : null;
+    String artist = scrobble.artist != null ? scrobble.artist.text : null;
+    String album = scrobble.album != null ? scrobble.album.text : null;
+    String albumArtist = scrobble.albumArtist != null ? scrobble.albumArtist.text : null;
+
+    long timestamp = parseLong(scrobble.timestamp);
+
+    boolean trackCorrected = scrobble.track != null && "1".equals(scrobble.track.corrected);
+    boolean artistCorrected = scrobble.artist != null && "1".equals(scrobble.artist.corrected);
+    boolean albumCorrected = scrobble.album != null && "1".equals(scrobble.album.corrected);
+    boolean albumArtistCorrected =
+        scrobble.albumArtist != null && "1".equals(scrobble.albumArtist.corrected);
+
+    int ignoredCode = scrobble.ignoredMessage != null ? parseInt(scrobble.ignoredMessage.code) : 0;
+
+    return new ScrobbleResult(
+        track,
+        artist,
+        album,
+        albumArtist,
+        timestamp,
+        trackCorrected,
+        artistCorrected,
+        albumCorrected,
+        albumArtistCorrected,
+        ignoredCode);
+  }
 
   private static int parseInt(String value) {
     if (value == null || value.isBlank()) {

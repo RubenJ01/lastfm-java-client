@@ -2,8 +2,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.chart.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseImageResponse;
-
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseImageResponse;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -45,14 +44,14 @@ public class GetTopArtistsResponse {
     @JsonProperty("#text")
     public String url;
 
-      @Override
-      public String getSize() {
-          return size;
-      }
+    @Override
+    public String getSize() {
+      return size;
+    }
 
-      @Override
-      public String getUrl() {
-          return url;
-      }
+    @Override
+    public String getUrl() {
+      return url;
+    }
   }
 }

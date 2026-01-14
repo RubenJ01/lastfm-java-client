@@ -9,7 +9,7 @@ import io.github.rubeneekhof.lastfm.domain.port.TrackGateway;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.LastFmErrorMapper;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.ParameterBuilder;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.ApiSignatureGenerator;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;

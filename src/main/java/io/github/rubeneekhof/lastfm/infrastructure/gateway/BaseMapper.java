@@ -1,17 +1,27 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway;
 
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseImageResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseWikiResponse;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class BaseMapper {
   protected static <T> List<T> mapImages(
-      List<? extends BaseImageResponse> images, Function<BaseImageResponse, T> mapper) {
+          List<? extends BaseImageResponse> images, Function<BaseImageResponse, T> mapper) {
     return Optional.ofNullable(images)
         .filter(list -> !list.isEmpty())
         .map(list -> list.stream().map(mapper).toList())
         .orElse(List.of());
   }
+
+    protected static <T> T mapWiki(BaseWikiResponse wiki, Function<BaseWikiResponse, T> mapper) {
+        if (wiki == null) {
+            return null;
+        }
+        return mapper.apply(wiki);
+    }
 
   protected static int parseNumber(Object value) {
     if (value == null) {

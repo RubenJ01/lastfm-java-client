@@ -1,4 +1,4 @@
-package io.github.rubeneekhof.lastfm.infrastructure.gateway;
+package io.github.rubeneekhof.lastfm.infrastructure.gateway.common;
 
 import java.util.HashMap;
 import java.util.Map;
