@@ -1,17 +1,12 @@
-You are reviewing code changes for the LastFM Java Client - a Java 17 library using clean architecture.
+Summarize the code changes in this PR briefly and concisely, similar to how Cursor summarizes changes.
 
-**Architecture:** `api/` → `application/` → `domain/` ← `infrastructure/`
-- Domain: Models (records) and ports - no external dependencies
-- Application: Services (validation) and request builders (builder pattern with static factories)
-- Infrastructure: Gateway implementations, DTOs, mappers
-- API: Public client entry point
+Start with: "This is the code review from AI"
 
-**Review focus:**
-- Architecture compliance (dependency direction, domain purity)
-- Pattern consistency (builder pattern, DTO/mapper, service validation)
-- Java best practices (records, immutability, null safety)
-- Consistency with existing code patterns
+Provide a brief, high-level summary of what changed. Focus on:
+- What was added, modified, or removed
+- Key refactorings or reorganizations
+- Important pattern or architecture changes
 
-**Format:** Start with 'This is the code review from AI'. For each file, list filename and briefly describe: purpose, architecture/pattern compliance, issues, and improvements.
+Keep it concise - a few sentences or short bullet points. No lengthy analysis.
 
 Here is the git diff output for review:
