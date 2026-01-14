@@ -1,4 +1,4 @@
-package io.github.rubeneekhof.lastfm.domain.model;
+package io.github.rubeneekhof.lastfm.domain.model.scrobble;
 
 public record ScrobbleResult(
     String track,

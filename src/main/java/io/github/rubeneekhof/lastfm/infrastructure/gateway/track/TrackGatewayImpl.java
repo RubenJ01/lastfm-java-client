@@ -2,7 +2,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
-import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailureException;
 import io.github.rubeneekhof.lastfm.domain.port.TrackGateway;
