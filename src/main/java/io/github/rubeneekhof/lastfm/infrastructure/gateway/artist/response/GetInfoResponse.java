@@ -44,10 +44,10 @@ public class GetInfoResponse {
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Stats {
     public String listeners;
-    
+
     @JsonProperty("playcount")
     public String plays;
-    
+
     public String userplaycount;
   }
 

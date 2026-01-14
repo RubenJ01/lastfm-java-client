@@ -331,7 +331,8 @@ class AlbumMapperTest {
   @Test
   void testGetInfo_MapsAllFieldsCorrectly() throws Exception {
     // Arrange
-    GetInfoResponse response = objectMapper.readValue(GET_INFO_JSON_RESPONSE, GetInfoResponse.class);
+    GetInfoResponse response =
+        objectMapper.readValue(GET_INFO_JSON_RESPONSE, GetInfoResponse.class);
 
     // Act
     Album album = AlbumMapper.from(response);

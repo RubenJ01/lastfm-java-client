@@ -202,7 +202,8 @@ class ArtistMapperTest {
   @Test
   void testGetInfo_MapsAllFieldsCorrectly() throws Exception {
     // Arrange
-    GetInfoResponse response = objectMapper.readValue(GET_INFO_JSON_RESPONSE, GetInfoResponse.class);
+    GetInfoResponse response =
+        objectMapper.readValue(GET_INFO_JSON_RESPONSE, GetInfoResponse.class);
 
     // Act
     Artist artist = ArtistMapper.from(response);
@@ -235,11 +236,11 @@ class ArtistMapperTest {
     // Similar artists
     assertNotNull(artist.similar(), "Similar artists should not be null");
     assertEquals(5, artist.similar().size(), "Should have 5 similar artists");
-    assertEquals("LOONA/yyxy", artist.similar().get(0).name(), "First similar artist name should match");
+    assertEquals(
+        "LOONA/yyxy", artist.similar().get(0).name(), "First similar artist name should match");
     assertEquals(
         "https://www.last.fm/music/LOONA%2Fyyxy",
-        artist.similar().get(0).url(),
-        "First similar artist URL should match");
+        artist.similar().get(0).url(), "First similar artist URL should match");
     assertEquals("HeeJin", artist.similar().get(4).name(), "Last similar artist name should match");
 
     // Tags
@@ -247,9 +248,7 @@ class ArtistMapperTest {
     assertEquals(5, artist.tags().size(), "Should have 5 tags");
     assertEquals("pop", artist.tags().get(0).name(), "First tag name should match");
     assertEquals(
-        "https://www.last.fm/tag/pop",
-        artist.tags().get(0).url(),
-        "First tag URL should match");
+        "https://www.last.fm/tag/pop", artist.tags().get(0).url(), "First tag URL should match");
     assertEquals("female vocalists", artist.tags().get(4).name(), "Last tag name should match");
 
     // Bio
