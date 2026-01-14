@@ -23,19 +23,19 @@ public class GetInfoResponse {
     public String summary;
     public String content;
 
-      @Override
-      public String getPublished() {
-          return published;
-      }
+    @Override
+    public String getPublished() {
+      return published;
+    }
 
-      @Override
-      public String getSummary() {
-          return summary;
-      }
+    @Override
+    public String getSummary() {
+      return summary;
+    }
 
-      @Override
-      public String getContent() {
-          return content;
-      }
+    @Override
+    public String getContent() {
+      return content;
+    }
   }
 }

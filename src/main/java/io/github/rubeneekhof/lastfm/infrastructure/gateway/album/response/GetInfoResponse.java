@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseImageResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseWikiResponse;
-
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -64,20 +63,20 @@ public class GetInfoResponse {
     public String summary;
     public String content;
 
-      @Override
-      public String getPublished() {
-          return published;
-      }
+    @Override
+    public String getPublished() {
+      return published;
+    }
 
-      @Override
-      public String getSummary() {
-          return summary;
-      }
+    @Override
+    public String getSummary() {
+      return summary;
+    }
 
-      @Override
-      public String getContent() {
-          return content;
-      }
+    @Override
+    public String getContent() {
+      return content;
+    }
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)

@@ -20,7 +20,12 @@ public class TagMapper extends BaseMapper {
 
     GetInfoResponse.TagData data = response.tag;
     return new Tag(
-        data.name, data.url, parseNumber(data.reach), parseNumber(data.total), mapWiki(data.wiki,
+        data.name,
+        data.url,
+        parseNumber(data.reach),
+        parseNumber(data.total),
+        mapWiki(
+            data.wiki,
             wiki -> new Tag.Wiki(wiki.getPublished(), wiki.getSummary(), wiki.getContent())));
   }
 
