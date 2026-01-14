@@ -3,7 +3,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.Session;
 import io.github.rubeneekhof.lastfm.domain.port.AuthGateway;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.auth.response.GetSessionResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.auth.response.GetTokenResponse;

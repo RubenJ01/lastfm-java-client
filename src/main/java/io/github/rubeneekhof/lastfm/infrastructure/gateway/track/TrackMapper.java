@@ -3,7 +3,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResult;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.ScrobbleResponse;
 import java.util.List;

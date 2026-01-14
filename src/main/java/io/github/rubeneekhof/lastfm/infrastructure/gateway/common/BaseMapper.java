@@ -1,4 +1,4 @@
-package io.github.rubeneekhof.lastfm.infrastructure.gateway;
+package io.github.rubeneekhof.lastfm.infrastructure.gateway.common;
 
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseImageResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseWikiResponse;

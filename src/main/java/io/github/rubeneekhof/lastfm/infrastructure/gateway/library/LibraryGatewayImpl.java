@@ -3,7 +3,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.library;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rubeneekhof.lastfm.domain.model.LibraryArtist;
 import io.github.rubeneekhof.lastfm.domain.port.LibraryGateway;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseGatewayImpl;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.library.response.GetArtistsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;

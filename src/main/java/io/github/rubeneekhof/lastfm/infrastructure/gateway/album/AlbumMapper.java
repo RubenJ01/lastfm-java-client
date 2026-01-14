@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.album;
 
 import io.github.rubeneekhof.lastfm.domain.model.Album;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.album.response.GetInfoResponse;
 import java.util.List;
 import java.util.Map;

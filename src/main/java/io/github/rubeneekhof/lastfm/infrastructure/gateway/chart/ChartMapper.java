@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.chart;
 
 import io.github.rubeneekhof.lastfm.domain.model.Artist;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.chart.response.GetTopArtistsResponse;
 import java.util.List;
 
