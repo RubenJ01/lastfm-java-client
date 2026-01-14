@@ -4,13 +4,15 @@ public record Tag(String name, String url, int reach, int taggings, Wiki wiki) {
   public record Wiki(String published, String summary, String content) {
     @Override
     public String toString() {
-      return "Wiki { published: '"
-          + published
-          + "', summary: '"
-          + summary
-          + "', content: '"
-          + content
-          + "' }";
+      StringBuilder sb = new StringBuilder();
+      sb.append("Wiki {\n");
+      sb.append("        published: '")
+          .append(published != null ? published : "null")
+          .append("',\n");
+      sb.append("        summary: '").append(summary != null ? summary : "null").append("',\n");
+      sb.append("        content: '").append(content != null ? content : "null").append("'\n");
+      sb.append("    }");
+      return sb.toString();
     }
   }
 
@@ -22,13 +24,8 @@ public record Tag(String name, String url, int reach, int taggings, Wiki wiki) {
     sb.append("    url: '").append(url).append("',\n");
     sb.append("    reach: ").append(reach).append(",\n");
     sb.append("    taggings: ").append(taggings).append(",\n");
-    sb.append("    wiki: ");
-    if (wiki != null) {
-      sb.append(wiki);
-    } else {
-      sb.append("null");
-    }
-    sb.append("\n}");
+    sb.append("    wiki: ").append(wiki != null ? wiki : "null").append("\n");
+    sb.append("}");
     return sb.toString();
   }
 }

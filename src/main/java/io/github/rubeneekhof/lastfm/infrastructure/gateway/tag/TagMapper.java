@@ -4,7 +4,7 @@ import io.github.rubeneekhof.lastfm.domain.model.tag.Tag;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TagAlbum;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TagArtist;
 import io.github.rubeneekhof.lastfm.domain.model.tag.TopTag;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopAlbumsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response.GetTopArtistsResponse;
@@ -20,7 +20,13 @@ public class TagMapper extends BaseMapper {
 
     GetInfoResponse.TagData data = response.tag;
     return new Tag(
-        data.name, data.url, parseNumber(data.reach), parseNumber(data.total), mapWiki(data.wiki));
+        data.name,
+        data.url,
+        parseNumber(data.reach),
+        parseNumber(data.total),
+        mapWiki(
+            data.wiki,
+            wiki -> new Tag.Wiki(wiki.getPublished(), wiki.getSummary(), wiki.getContent())));
   }
 
   public static List<TagAlbum> from(GetTopAlbumsResponse response) {
@@ -92,12 +98,5 @@ public class TagMapper extends BaseMapper {
     } catch (NumberFormatException e) {
       return 0;
     }
-  }
-
-  private static Tag.Wiki mapWiki(GetInfoResponse.Wiki wiki) {
-    if (wiki == null) {
-      return null;
-    }
-    return new Tag.Wiki(wiki.published, wiki.summary, wiki.content);
   }
 }

@@ -2,7 +2,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.tag.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseImageResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseImageResponse;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

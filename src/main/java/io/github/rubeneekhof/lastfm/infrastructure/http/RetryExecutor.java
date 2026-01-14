@@ -4,7 +4,7 @@ import io.github.rubeneekhof.lastfm.domain.model.error.LastFmFailure;
 import io.github.rubeneekhof.lastfm.domain.model.error.RateLimited;
 import io.github.rubeneekhof.lastfm.domain.model.error.ServiceUnavailable;
 import io.github.rubeneekhof.lastfm.exception.LastFmException;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.LastFmErrorMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.LastFmErrorMapper;
 import java.util.function.Supplier;
 
 /**

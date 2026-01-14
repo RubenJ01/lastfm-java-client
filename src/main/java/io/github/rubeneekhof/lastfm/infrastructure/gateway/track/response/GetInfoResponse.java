@@ -2,6 +2,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.response.BaseImageResponse;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -59,8 +60,7 @@ public class GetInfoResponse {
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class Image
-      implements io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseImageResponse {
+  public static class Image implements BaseImageResponse {
     public String size;
 
     @JsonProperty("#text")

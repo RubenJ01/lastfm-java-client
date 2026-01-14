@@ -1,8 +1,8 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.album;
 
 import io.github.rubeneekhof.lastfm.domain.model.Album;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.album.response.GetInfoResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,17 +22,13 @@ public class AlbumMapper extends BaseMapper {
         data.mbid,
         data.url,
         extractReleaseDate(data),
-        mapImages(data.image),
+        mapImages(data.image, img -> new Album.Image(img.getSize(), img.getUrl())),
         mapStats(data.listeners, data.playcount, data.userplaycount),
         mapTags(data.tags),
-        mapTracks(data.tracks));
-  }
-
-  private static List<Album.Image> mapImages(List<GetInfoResponse.Image> images) {
-    return Optional.ofNullable(images)
-        .filter(list -> !list.isEmpty())
-        .map(list -> list.stream().map(img -> new Album.Image(img.size, img.url)).toList())
-        .orElse(List.of());
+        mapTracks(data.tracks),
+        mapWiki(
+            data.wiki,
+            wiki -> new Album.Wiki(wiki.getPublished(), wiki.getSummary(), wiki.getContent())));
   }
 
   private static String extractReleaseDate(GetInfoResponse.AlbumData data) {
