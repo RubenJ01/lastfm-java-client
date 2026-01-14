@@ -93,9 +93,20 @@ public class ArtistMapper extends BaseMapper {
   }
 
   private static Artist.Stats mapStats(GetInfoResponse.Stats stats) {
-    return Optional.ofNullable(stats)
-        .map(s -> new Artist.Stats(s.listeners, s.plays, s.userplaycount))
-        .orElse(null);
+    if (stats == null) {
+      return null;
+    }
+    try {
+      int listenersCount = parseNumber(stats.listeners);
+      int plays = parseNumber(stats.plays);
+      Integer userPlays = null;
+      if (stats.userplaycount != null && !stats.userplaycount.isBlank()) {
+        userPlays = parseNumber(stats.userplaycount);
+      }
+      return new Artist.Stats(listenersCount, plays, userPlays);
+    } catch (NumberFormatException e) {
+      return new Artist.Stats(0, 0, null);
+    }
   }
 
   private static List<Artist> mapSimilar(GetInfoResponse.Similar similar) {

@@ -43,9 +43,12 @@ public class GetInfoResponse {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Stats {
-    public int listeners;
-    public int plays;
-    public Integer userplaycount;
+    public String listeners;
+    
+    @JsonProperty("playcount")
+    public String plays;
+    
+    public String userplaycount;
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
