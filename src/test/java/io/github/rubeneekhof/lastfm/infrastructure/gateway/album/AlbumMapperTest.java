@@ -382,7 +382,7 @@ class AlbumMapperTest {
     // First track
     Album.Track firstTrack = album.tracks().get(0);
     assertEquals("The Gate", firstTrack.name(), "First track name should match");
-    assertEquals(102, firstTrack.duration(), "First track duration should match");
+    assertEquals(1022, firstTrack.duration(), "First track duration should match");
     assertEquals(
         "https://www.last.fm/music/Caroline+Polachek/Pang/The+Gate",
         firstTrack.url(),
