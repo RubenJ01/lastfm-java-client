@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.library;
 
 import io.github.rubeneekhof.lastfm.domain.model.LibraryArtist;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.library.response.GetArtistsResponse;
 import java.util.List;
 import java.util.Optional;

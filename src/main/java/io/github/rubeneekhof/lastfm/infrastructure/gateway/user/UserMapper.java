@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.user;
 
 import io.github.rubeneekhof.lastfm.domain.model.User;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.BaseMapper;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetInfoResponse;
 
 public class UserMapper extends BaseMapper {
