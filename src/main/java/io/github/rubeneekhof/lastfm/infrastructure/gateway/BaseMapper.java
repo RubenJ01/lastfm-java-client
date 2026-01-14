@@ -15,6 +15,8 @@ public abstract class BaseMapper {
 
   protected static int parseNumber(Object value) {
     if (value == null) {
+
+        System.out.println("Some Random Debug line");
       return 0;
     }
 
