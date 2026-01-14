@@ -5,7 +5,6 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetCo
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
-
 import java.util.List;
 import java.util.Optional;
 
