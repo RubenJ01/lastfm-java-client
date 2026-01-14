@@ -1,6 +1,6 @@
 package io.github.rubeneekhof.lastfm.application.track;
 
-import io.github.rubeneekhof.lastfm.domain.model.Scrobble;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
 import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.port.TrackGateway;

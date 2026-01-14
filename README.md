@@ -139,21 +139,25 @@ Scrobbling is the process of recording that you've listened to a track. The `tra
 The minimum required information is artist, track, and timestamp:
 
 ````java
-import io.github.rubeneekhof.lastfm.domain.model.Scrobble;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
 
 // Create an authenticated client first
 LastFmClient client = LastFmClient.createAuthenticated(apiKey, apiSecret, sessionKey);
 
-// Scrobble a single track
-long timestamp = System.currentTimeMillis() / 1000 - 60; // 1 minute ago
-Scrobble scrobble = Scrobble.builder()
-    .artist("Radiohead")
-    .track("Creep")
-    .timestamp(timestamp)
-    .build();
+        // Scrobble a single track
+        long timestamp = System.currentTimeMillis() / 1000 - 60; // 1 minute ago
+        Scrobble scrobble = Scrobble.builder()
+                .artist("Radiohead")
+                .track("Creep")
+                .timestamp(timestamp)
+                .build();
 
-ScrobbleResponse response = client.tracks().scrobble(scrobble);
-System.out.println("Accepted: " + response.accepted() + ", Ignored: " + response.ignored());
+        ScrobbleResponse response = client.tracks().scrobble(scrobble);
+System.out.
+
+        println("Accepted: "+response.accepted() +", Ignored: "+response.
+
+        ignored());
 ````
 
 ### Scrobbling with Optional Parameters
