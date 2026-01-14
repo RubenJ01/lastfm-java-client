@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.domain.port;
 
-import io.github.rubeneekhof.lastfm.domain.model.Scrobble;
-import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
 import java.util.List;
 

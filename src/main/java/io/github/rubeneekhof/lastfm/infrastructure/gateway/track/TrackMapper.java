@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.track;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.ScrobbleResult;
+import io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResult;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.GetInfoResponse;
@@ -13,10 +13,10 @@ public class TrackMapper extends BaseMapper {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
-  public static io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse from(
+  public static io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse from(
       ScrobbleResponse response) {
     if (response == null || response.scrobbles == null) {
-      return new io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse(0, 0, List.of());
+      return new io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse(0, 0, List.of());
     }
 
     int accepted = parseInt(response.scrobbles.accepted);
@@ -24,7 +24,7 @@ public class TrackMapper extends BaseMapper {
 
     List<ScrobbleResult> results = parseScrobbles(response.scrobbles.scrobble);
 
-    return new io.github.rubeneekhof.lastfm.domain.model.ScrobbleResponse(
+    return new io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse(
         accepted, ignored, results);
   }
 
