@@ -218,65 +218,65 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 
 ## API Coverage
 
-| Category | Method | Status | Test | Notes |
-|----------|--------|--------|------|-------|
-| **Album** | `album.getInfo` | ✅ | ✅ | |
-| | `album.addTags` | ⏳ | ⏳ | |
-| | `album.getTags` | ⏳ | ⏳ | |
-| | `album.getTopTags` | ⏳ | ⏳ | |
-| | `album.removeTag` | ⏳ | ⏳ | |
-| | `album.search` | ⏳ | ⏳ | |
-| **Artist** | `artist.getInfo` | ✅ | ✅ | |
-| | `artist.getSimilar` | ✅ | ⏳ | |
-| | `artist.getCorrection` | ✅ | ✅ | |
-| | `artist.addTags` | ⏳ | ⏳ | |
-| | `artist.getTags` | ⏳ | ⏳ | |
-| | `artist.getTopAlbums` | ⏳ | ⏳ | |
-| | `artist.getTopTags` | ⏳ | ⏳ | |
-| | `artist.getTopTracks` | ⏳ | ⏳ | |
-| | `artist.removeTag` | ⏳ | ⏳ | |
-| | `artist.search` | ⏳ | ⏳ | |
-| **Auth** | `auth.getMobileSession` | ⏳ | ⏳ | |
-| | `auth.getSession` | ✅ | ⏳ | |
-| | `auth.getToken` | ✅ | ⏳ | |
-| **Chart** | `chart.getTopArtists` | ✅ | ⏳ | |
-| | `chart.getTopTags` | ⏳ | ⏳ | |
-| | `chart.getTopTracks` | ⏳ | ⏳ | |
-| **Geo** | `geo.getTopArtists` | ✅ | ⏳ | |
-| | `geo.getTopTracks` | ⏳ | ⏳ | |
-| **Library** | `library.getArtists` | ✅ | ⏳ | |
-| **Tag** | `tag.getInfo` | ✅ | ⏳ | |
-| | `tag.getSimilar` | ⏳ | ⏳ | |
-| | `tag.getTopAlbums` | ✅ | ⏳ | |
-| | `tag.getTopArtists` | ✅ | ⏳ | |
-| | `tag.getTopTags` | ⏳ | ⏳ | |
-| | `tag.getTopTracks` | ⏳ | ⏳ | |
-| | `tag.getWeeklyChartList` | ⏳ | ⏳ | |
-| **Track** | `track.addTags` | ⏳ | ⏳ | |
-| | `track.getCorrection` | ⏳ | ⏳ | |
-| | `track.getInfo` | ✅ | ⏳ | |
-| | `track.getSimilar` | ⏳ | ⏳ | |
-| | `track.getTags` | ⏳ | ⏳ | |
-| | `track.getTopTags` | ⏳ | ⏳ | |
-| | `track.love` | ⏳ | ⏳ | |
-| | `track.removeTag` | ⏳ | ⏳ | |
-| | `track.scrobble` | ✅ | ⏳ | |
-| | `track.search` | ⏳ | ⏳ | |
-| | `track.unlove` | ⏳ | ⏳ | |
-| | `track.updateNowPlaying` | ⏳ | ⏳ | |
-| **User** | `user.getFriends` | ⏳ | ⏳ | |
-| | `user.getInfo` | ✅ | ⏳ | |
-| | `user.getLovedTracks` | ⏳ | ⏳ | |
-| | `user.getPersonalTags` | ⏳ | ⏳ | |
-| | `user.getRecentTracks` | ⏳ | ⏳ | |
-| | `user.getTopAlbums` | ⏳ | ⏳ | |
-| | `user.getTopArtists` | ⏳ | ⏳ | |
-| | `user.getTopTags` | ⏳ | ⏳ | |
-| | `user.getTopTracks` | ⏳ | ⏳ | |
-| | `user.getWeeklyAlbumChart` | ⏳ | ⏳ | |
-| | `user.getWeeklyArtistChart` | ⏳ | ⏳ | |
-| | `user.getWeeklyChartList` | ⏳ | ⏳ | |
-| | `user.getWeeklyTrackChart` | ⏳ | ⏳ | |
+| Category | Method | Status | Test | Notes                                                                       |
+|----------|--------|--------|------|-----------------------------------------------------------------------------|
+| **Album** | `album.getInfo` | ✅ | ✅ |                                                                             |
+| | `album.addTags` | ⏳ | ⏳ |                                                                             |
+| | `album.getTags` | ⏳ | ⏳ |                                                                             |
+| | `album.getTopTags` | ⏳ | ⏳ |                                                                             |
+| | `album.removeTag` | ⏳ | ⏳ |                                                                             |
+| | `album.search` | ⏳ | ⏳ |                                                                             |
+| **Artist** | `artist.getInfo` | ✅ | ✅ |                                                                             |
+| | `artist.getSimilar` | ✅ | ⏳ |                                                                             |
+| | `artist.getCorrection` | ✅ | ✅ |                                                                             |
+| | `artist.addTags` | ⏳ | ⏳ |                                                                             |
+| | `artist.getTags` | ⏳ | ⏳ |                                                                             |
+| | `artist.getTopAlbums` | ⏳ | ⏳ |                                                                             |
+| | `artist.getTopTags` | ⏳ | ⏳ |                                                                             |
+| | `artist.getTopTracks` | ⏳ | ⏳ |                                                                             |
+| | `artist.removeTag` | ⏳ | ⏳ |                                                                             |
+| | `artist.search` | ⏳ | ⏳ |                                                                             |
+| **Auth** | `auth.getMobileSession` | ⏳ | ⏳ |                                                                             |
+| | `auth.getSession` | ✅ | ⏳ |                                                                             |
+| | `auth.getToken` | ✅ | ⏳ |                                                                             |
+| **Chart** | `chart.getTopArtists` | ✅ | ⏳ |                                                                             |
+| | `chart.getTopTags` | ⏳ | ⏳ |                                                                             |
+| | `chart.getTopTracks` | ⏳ | ⏳ |                                                                             |
+| **Geo** | `geo.getTopArtists` | ✅ | ⏳ |                                                                             |
+| | `geo.getTopTracks` | ⏳ | ⏳ |                                                                             |
+| **Library** | `library.getArtists` | ✅ | ⏳ |                                                                             |
+| **Tag** | `tag.getInfo` | ✅ | ⏳ |                                                                             |
+| | `tag.getSimilar` | ❌ | ❌ | This API call is currently broken and returns an empty array as a response. |
+| | `tag.getTopAlbums` | ✅ | ⏳ |                                                                             |
+| | `tag.getTopArtists` | ✅ | ⏳ |                                                                             |
+| | `tag.getTopTags` | ⏳ | ⏳ |                                                                             |
+| | `tag.getTopTracks` | ⏳ | ⏳ |                                                                             |
+| | `tag.getWeeklyChartList` | ⏳ | ⏳ |                                                                             |
+| **Track** | `track.addTags` | ⏳ | ⏳ |                                                                             |
+| | `track.getCorrection` | ⏳ | ⏳ |                                                                             |
+| | `track.getInfo` | ✅ | ⏳ |                                                                             |
+| | `track.getSimilar` | ⏳ | ⏳ |                                                                             |
+| | `track.getTags` | ⏳ | ⏳ |                                                                             |
+| | `track.getTopTags` | ⏳ | ⏳ |                                                                             |
+| | `track.love` | ⏳ | ⏳ |                                                                             |
+| | `track.removeTag` | ⏳ | ⏳ |                                                                             |
+| | `track.scrobble` | ✅ | ⏳ |                                                                             |
+| | `track.search` | ⏳ | ⏳ |                                                                             |
+| | `track.unlove` | ⏳ | ⏳ |                                                                             |
+| | `track.updateNowPlaying` | ⏳ | ⏳ |                                                                             |
+| **User** | `user.getFriends` | ⏳ | ⏳ |                                                                             |
+| | `user.getInfo` | ✅ | ⏳ |                                                                             |
+| | `user.getLovedTracks` | ⏳ | ⏳ |                                                                             |
+| | `user.getPersonalTags` | ⏳ | ⏳ |                                                                             |
+| | `user.getRecentTracks` | ⏳ | ⏳ |                                                                             |
+| | `user.getTopAlbums` | ⏳ | ⏳ |                                                                             |
+| | `user.getTopArtists` | ⏳ | ⏳ |                                                                             |
+| | `user.getTopTags` | ⏳ | ⏳ |                                                                             |
+| | `user.getTopTracks` | ⏳ | ⏳ |                                                                             |
+| | `user.getWeeklyAlbumChart` | ⏳ | ⏳ |                                                                             |
+| | `user.getWeeklyArtistChart` | ⏳ | ⏳ |                                                                             |
+| | `user.getWeeklyChartList` | ⏳ | ⏳ |                                                                             |
+| | `user.getWeeklyTrackChart` | ⏳ | ⏳ |                                                                             |
 
 **Legend:** ✅ Implemented | ⏳ Not yet implemented
 
