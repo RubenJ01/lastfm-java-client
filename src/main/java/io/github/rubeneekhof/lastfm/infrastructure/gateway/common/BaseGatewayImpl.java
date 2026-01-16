@@ -20,8 +20,7 @@ public abstract class BaseGatewayImpl implements LastFmApiGateway {
   protected <T> T executeWithErrorHandling(
       String method, Map<String, String> params, Class<T> responseClass) {
     try {
-      T response = getAndParse(http, mapper, method, params, responseClass);
-      return response;
+        return getAndParse(http, mapper, method, params, responseClass);
     } catch (LastFmException e) {
       throw new LastFmFailureException(LastFmErrorMapper.map(e.code(), e.getMessage()));
     }
