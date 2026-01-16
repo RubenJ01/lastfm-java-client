@@ -274,7 +274,7 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `user.getWeeklyChartList` | ⏳ | ⏳ |                                                                             |
 | | `user.getWeeklyTrackChart` | ⏳ | ⏳ |                                                                             |
 
-**Legend:** ✅ Implemented | ⏳ Not yet implemented
+**Legend:** ✅ Implemented | ⏳ Not yet implemented | ❌ Can't/Won't be implemented
 
 ## Project Structure
 
