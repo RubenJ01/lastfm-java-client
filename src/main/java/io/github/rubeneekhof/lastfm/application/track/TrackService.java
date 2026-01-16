@@ -198,4 +198,51 @@ public class TrackService {
   public void love(TrackLoveRequest request) {
     gateway.love(request.artist(), request.track());
   }
+
+  /**
+   * Unlove a track for a user profile.
+   *
+   * <p>This method requires authentication. Use {@link LastFmClient#createAuthenticated(String,
+   * String, String)} to create an authenticated client.
+   *
+   * <p>This is a convenience method that requires both artist and track names.
+   *
+   * @param artist the artist name (required)
+   * @param track the track name (required)
+   * @throws IllegalArgumentException if artist or track is null or blank
+   * @throws IllegalStateException if the client is not authenticated
+   * @see #unlove(TrackUnloveRequest) for using the builder pattern
+   */
+  public void unlove(String artist, String track) {
+    if (artist == null || artist.isBlank()) {
+      throw new IllegalArgumentException("Artist must not be blank");
+    }
+    if (track == null || track.isBlank()) {
+      throw new IllegalArgumentException("Track must not be blank");
+    }
+    unlove(TrackUnloveRequest.artist(artist).track(track).build());
+  }
+
+  /**
+   * Unlove a track for a user profile.
+   *
+   * <p>This method requires authentication. Use {@link LastFmClient#createAuthenticated(String,
+   * String, String)} to create an authenticated client.
+   *
+   * <p>This method provides full control using the builder pattern:
+   *
+   * <pre>{@code
+   * client.tracks().unlove(
+   *     TrackUnloveRequest.artist("Radiohead")
+   *         .track("Creep")
+   *         .build()
+   * );
+   * }</pre>
+   *
+   * @param request the request containing artist and track names
+   * @throws IllegalStateException if the client is not authenticated
+   */
+  public void unlove(TrackUnloveRequest request) {
+    gateway.unlove(request.artist(), request.track());
+  }
 }

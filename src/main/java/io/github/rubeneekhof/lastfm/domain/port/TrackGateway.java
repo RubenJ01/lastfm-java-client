@@ -11,4 +11,6 @@ public interface TrackGateway extends LastFmApiGateway {
   Track getInfo(String artist, String track, String mbid, Boolean autocorrect, String username);
 
   void love(String artist, String track);
+
+  void unlove(String artist, String track);
 }
