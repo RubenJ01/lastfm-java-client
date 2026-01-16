@@ -9,4 +9,6 @@ public interface TrackGateway extends LastFmApiGateway {
   ScrobbleResponse scrobble(List<Scrobble> scrobbles);
 
   Track getInfo(String artist, String track, String mbid, Boolean autocorrect, String username);
+
+  void love(String artist, String track);
 }

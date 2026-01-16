@@ -1,5 +1,6 @@
 package io.github.rubeneekhof.lastfm.application.track;
 
+import io.github.rubeneekhof.lastfm.api.LastFmClient;
 import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
 import io.github.rubeneekhof.lastfm.domain.model.scrobble.ScrobbleResponse;
@@ -149,5 +150,52 @@ public class TrackService {
 
   public ScrobbleResponse scrobble(TrackScrobbleRequest request) {
     return gateway.scrobble(request.scrobbles());
+  }
+
+  /**
+   * Love a track for a user profile.
+   *
+   * <p>This method requires authentication. Use {@link LastFmClient#createAuthenticated(String,
+   * String, String)} to create an authenticated client.
+   *
+   * <p>This is a convenience method that requires both artist and track names.
+   *
+   * @param artist the artist name (required)
+   * @param track the track name (required)
+   * @throws IllegalArgumentException if artist or track is null or blank
+   * @throws IllegalStateException if the client is not authenticated
+   * @see #love(TrackLoveRequest) for using the builder pattern
+   */
+  public void love(String artist, String track) {
+    if (artist == null || artist.isBlank()) {
+      throw new IllegalArgumentException("Artist must not be blank");
+    }
+    if (track == null || track.isBlank()) {
+      throw new IllegalArgumentException("Track must not be blank");
+    }
+    love(TrackLoveRequest.artist(artist).track(track).build());
+  }
+
+  /**
+   * Love a track for a user profile.
+   *
+   * <p>This method requires authentication. Use {@link LastFmClient#createAuthenticated(String,
+   * String, String)} to create an authenticated client.
+   *
+   * <p>This method provides full control using the builder pattern:
+   *
+   * <pre>{@code
+   * client.tracks().love(
+   *     TrackLoveRequest.artist("Radiohead")
+   *         .track("Creep")
+   *         .build()
+   * );
+   * }</pre>
+   *
+   * @param request the request containing artist and track names
+   * @throws IllegalStateException if the client is not authenticated
+   */
+  public void love(TrackLoveRequest request) {
+    gateway.love(request.artist(), request.track());
   }
 }
