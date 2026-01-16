@@ -8,7 +8,7 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.album.response.GetInf
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class AlbumMapperTest {
+class AlbumGetInfoMapperTest {
 
   private ObjectMapper objectMapper;
   private static final String GET_INFO_JSON_RESPONSE =
