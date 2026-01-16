@@ -254,7 +254,7 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `track.getSimilar` | ⏳ | ⏳ |                                                                             |
 | | `track.getTags` | ⏳ | ⏳ |                                                                             |
 | | `track.getTopTags` | ⏳ | ⏳ |                                                                             |
-| | `track.love` | ⏳ | ⏳ |                                                                             |
+| | `track.love` | ✅ | ❌ | API call doesn't return anything so no test has been made (yet)             |
 | | `track.removeTag` | ⏳ | ⏳ |                                                                             |
 | | `track.scrobble` | ✅ | ⏳ |                                                                             |
 | | `track.search` | ⏳ | ⏳ |                                                                             |
