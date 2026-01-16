@@ -154,4 +154,24 @@ public abstract class BaseMapper {
 
     return 0;
   }
+
+  /**
+   * Parses a string value from an API response into a {@code long}.
+   *
+   * <p>The Last.fm API often returns numbers as strings. This method safely handles {@code null} and
+   * blank strings. If the value cannot be parsed, {@code 0} is returned.
+   *
+   * @param value the string value to parse (may be {@code null})
+   * @return the parsed long value, or {@code 0} if parsing fails or the value is {@code null} or blank
+   */
+  protected static long parseLong(String value) {
+    if (value == null || value.isBlank()) {
+      return 0;
+    }
+    try {
+      return Long.parseLong(value);
+    } catch (NumberFormatException e) {
+      return 0;
+    }
+  }
 }
