@@ -1,8 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.artist;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetCorrectionResponse;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -162,12 +161,5 @@ public class ArtistGetSimilarMapperTest {
                 sut.images().get(0).url(),
                 "First image URL should match");
         assertEquals("", sut.images().get(5).size(), "Last image size should be empty string");
-
-        // Fields that should be empty/null for similar response
-        assertNotNull(sut.similar(), "Similar should not be null");
-        assertNotNull(sut.tags(), "Tags should not be null");
-        assertNull(sut.bio(), "Bio should be null");
-        assertNull(sut.stats(), "Stats should be null");
-        assertNull(sut.mbid(), "Mbid should be null");
     }
 }

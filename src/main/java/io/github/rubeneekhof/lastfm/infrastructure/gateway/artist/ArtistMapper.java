@@ -1,9 +1,11 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.artist;
 
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.ArtistSearchResult;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetCorrectionResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.SearchResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import java.util.List;
 import java.util.Optional;
@@ -129,5 +131,47 @@ public class ArtistMapper extends BaseMapper {
     return Optional.ofNullable(bio)
         .map(b -> new Artist.Bio(b.published, b.summary, b.content))
         .orElse(null);
+  }
+
+  public static ArtistSearchResult from(SearchResponse response) {
+    if (response == null || response.results == null) {
+      return new ArtistSearchResult(0, 0, 0, List.of());
+    }
+
+    SearchResponse.Results results = response.results;
+    int totalResults = parseNumber(results.totalResults);
+    int startIndex = parseNumber(results.startIndex);
+    int itemsPerPage = parseNumber(results.itemsPerPage);
+
+    List<Artist> artists = List.of();
+    if (results.artistmatches != null && results.artistmatches.artist != null) {
+      artists =
+          results.artistmatches.artist.stream()
+              .map(ArtistMapper::fromSearchArtist)
+              .toList();
+    }
+
+    return new ArtistSearchResult(totalResults, startIndex, itemsPerPage, artists);
+  }
+
+  private static Artist fromSearchArtist(SearchResponse.ArtistData data) {
+    if (data == null) {
+      return null;
+    }
+
+    int listeners = parseNumber(data.listeners);
+    Artist.Stats stats = new Artist.Stats(listeners, 0, null);
+
+    return new Artist(
+        data.name,
+        data.mbid,
+        data.url,
+        mapImages(data.image, img -> new Artist.Image(img.getSize(), img.getUrl())),
+        data.streamable,
+        stats,
+        List.of(),
+        List.of(),
+        null,
+        null);
   }
 }

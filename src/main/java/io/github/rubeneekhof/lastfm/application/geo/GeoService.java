@@ -1,6 +1,6 @@
 package io.github.rubeneekhof.lastfm.application.geo;
 
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
 import io.github.rubeneekhof.lastfm.domain.port.GeoGateway;
 import java.util.List;
 

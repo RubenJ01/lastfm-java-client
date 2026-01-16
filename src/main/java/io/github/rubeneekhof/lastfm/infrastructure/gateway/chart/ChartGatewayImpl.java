@@ -1,7 +1,7 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.chart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
 import io.github.rubeneekhof.lastfm.domain.port.ChartGateway;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.chart.response.GetTopArtistsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImpl;
