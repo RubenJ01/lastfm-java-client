@@ -223,7 +223,7 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `album.removeTag` | ⏳ | ⏳ |                                                                             |
 | | `album.search` | ⏳ | ⏳ |                                                                             |
 | **Artist** | `artist.getInfo` | ✅ | ✅ |                                                                             |
-| | `artist.getSimilar` | ✅ | ⏳ |                                                                             |
+| | `artist.getSimilar` | ✅ | ✅ |                                                                             |
 | | `artist.getCorrection` | ✅ | ✅ |                                                                             |
 | | `artist.addTags` | ⏳ | ⏳ |                                                                             |
 | | `artist.getTags` | ⏳ | ⏳ |                                                                             |
