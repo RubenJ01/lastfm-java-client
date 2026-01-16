@@ -11,7 +11,6 @@ import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImp
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.LastFmErrorMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.GetInfoResponse;
-import io.github.rubeneekhof.lastfm.infrastructure.gateway.track.response.LoveResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.ApiSignatureGenerator;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.io.IOException;
@@ -164,12 +163,40 @@ public class TrackGatewayImpl extends BaseGatewayImpl implements TrackGateway {
       String apiSig = ApiSignatureGenerator.generate("track.love", sigParams, apiSecret);
       params.put("api_sig", apiSig);
 
-      String body = http.post("track.love", params);
-      mapper.readValue(body, LoveResponse.class);
+      http.post("track.love", params);
     } catch (LastFmException e) {
       throw new LastFmFailureException(LastFmErrorMapper.map(e.code(), e.getMessage()));
     } catch (IOException | InterruptedException e) {
       throw new LastFmException(0, "Failed to love track: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void unlove(String artist, String track) {
+    if (apiSecret == null || sessionKey == null) {
+      throw new IllegalStateException(
+          "Unloving a track requires authentication. Use createAuthenticated() to create a client with session key.");
+    }
+
+    try {
+      Map<String, String> params =
+          ParameterBuilder.create()
+              .putRequired("artist", artist)
+              .putRequired("track", track)
+              .putRequired("sk", sessionKey)
+              .build();
+
+      Map<String, String> sigParams = new TreeMap<>(params);
+      sigParams.put("api_key", http.getApiKey());
+
+      String apiSig = ApiSignatureGenerator.generate("track.unlove", sigParams, apiSecret);
+      params.put("api_sig", apiSig);
+
+      http.post("track.unlove", params);
+    } catch (LastFmException e) {
+      throw new LastFmFailureException(LastFmErrorMapper.map(e.code(), e.getMessage()));
+    } catch (IOException | InterruptedException e) {
+      throw new LastFmException(0, "Failed to unlove track: " + e.getMessage(), e);
     }
   }
 }

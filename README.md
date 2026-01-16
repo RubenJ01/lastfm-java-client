@@ -254,11 +254,11 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `track.getSimilar` | ⏳ | ⏳ |                                                                             |
 | | `track.getTags` | ⏳ | ⏳ |                                                                             |
 | | `track.getTopTags` | ⏳ | ⏳ |                                                                             |
-| | `track.love` | ✅ | ❌ | API call doesn't return anything so no test has been made (yet)             |
+| | `track.love` | ✅ | ❌ | This API call doesn't return anything so no test has been made (yet)        |
 | | `track.removeTag` | ⏳ | ⏳ |                                                                             |
 | | `track.scrobble` | ✅ | ⏳ |                                                                             |
 | | `track.search` | ⏳ | ⏳ |                                                                             |
-| | `track.unlove` | ⏳ | ⏳ |                                                                             |
+| | `track.unlove` | ✅ | ❌ | This API call doesn't return anything so no test has been made (yet)        |
 | | `track.updateNowPlaying` | ⏳ | ⏳ |                                                                             |
 | **User** | `user.getFriends` | ⏳ | ⏳ |                                                                             |
 | | `user.getInfo` | ✅ | ⏳ |                                                                             |
