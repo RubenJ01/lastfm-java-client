@@ -1,6 +1,7 @@
 package io.github.rubeneekhof.lastfm.application.artist;
 
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.ArtistSearchResult;
 import io.github.rubeneekhof.lastfm.domain.port.ArtistGateway;
 import java.util.List;
 import java.util.Optional;
@@ -85,6 +86,34 @@ public class ArtistService {
   private void validateLimit(int limit) {
     if (limit <= 0) {
       throw new IllegalArgumentException("Limit must be greater than zero");
+    }
+  }
+
+  public ArtistSearchResult search(String artist) {
+    validateArtistName(artist);
+    return search(ArtistSearchRequest.artist(artist).build());
+  }
+
+  public ArtistSearchResult search(String artist, int limit) {
+    validateArtistName(artist);
+    validateLimit(limit);
+    return search(ArtistSearchRequest.artist(artist).limit(limit).build());
+  }
+
+  public ArtistSearchResult search(String artist, int limit, int page) {
+    validateArtistName(artist);
+    validateLimit(limit);
+    validatePage(page);
+    return search(ArtistSearchRequest.artist(artist).limit(limit).page(page).build());
+  }
+
+  public ArtistSearchResult search(ArtistSearchRequest request) {
+    return gateway.search(request.artist(), request.limit(), request.page());
+  }
+
+  private void validatePage(int page) {
+    if (page <= 0) {
+      throw new IllegalArgumentException("Page must be greater than zero");
     }
   }
 }

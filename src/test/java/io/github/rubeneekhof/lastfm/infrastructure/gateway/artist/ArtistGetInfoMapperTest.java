@@ -3,7 +3,7 @@ package io.github.rubeneekhof.lastfm.infrastructure.gateway.artist;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetInfoResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

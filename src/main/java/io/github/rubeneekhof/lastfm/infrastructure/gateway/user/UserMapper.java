@@ -41,14 +41,4 @@ public class UserMapper extends BaseMapper {
     return 0;
   }
 
-  private static long parseLong(String value) {
-    if (value == null || value.isBlank()) {
-      return 0;
-    }
-    try {
-      return Long.parseLong(value);
-    } catch (NumberFormatException e) {
-      return 0;
-    }
-  }
 }

@@ -102,16 +102,6 @@ public class TrackMapper extends BaseMapper {
     }
   }
 
-  private static long parseLong(String value) {
-    if (value == null || value.isBlank()) {
-      return 0;
-    }
-    try {
-      return Long.parseLong(value);
-    } catch (NumberFormatException e) {
-      return 0;
-    }
-  }
 
   public static Track from(GetInfoResponse response) {
     if (response == null || response.track == null) {

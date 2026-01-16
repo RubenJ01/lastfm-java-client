@@ -231,7 +231,7 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 | | `artist.getTopTags` | ⏳ | ⏳ |                                                                             |
 | | `artist.getTopTracks` | ⏳ | ⏳ |                                                                             |
 | | `artist.removeTag` | ⏳ | ⏳ |                                                                             |
-| | `artist.search` | ⏳ | ⏳ |                                                                             |
+| | `artist.search` | ✅ | ✅ |                                                                             |
 | **Auth** | `auth.getMobileSession` | ⏳ | ⏳ |                                                                             |
 | | `auth.getSession` | ✅ | ⏳ |                                                                             |
 | | `auth.getToken` | ✅ | ⏳ |                                                                             |

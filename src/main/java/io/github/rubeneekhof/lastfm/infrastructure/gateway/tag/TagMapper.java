@@ -89,14 +89,4 @@ public class TagMapper extends BaseMapper {
     return new TopTag(data.name, parseLong(data.count), parseLong(data.reach));
   }
 
-  private static long parseLong(String value) {
-    if (value == null || value.isBlank()) {
-      return 0;
-    }
-    try {
-      return Long.parseLong(value);
-    } catch (NumberFormatException e) {
-      return 0;
-    }
-  }
 }

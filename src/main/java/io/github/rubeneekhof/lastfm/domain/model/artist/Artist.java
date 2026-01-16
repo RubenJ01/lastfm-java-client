@@ -1,4 +1,4 @@
-package io.github.rubeneekhof.lastfm.domain.model;
+package io.github.rubeneekhof.lastfm.domain.model.artist;
 
 import java.util.List;
 

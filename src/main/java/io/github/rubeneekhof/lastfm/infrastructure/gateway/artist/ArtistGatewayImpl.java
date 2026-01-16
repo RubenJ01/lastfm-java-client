@@ -1,11 +1,13 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.artist;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
 import io.github.rubeneekhof.lastfm.domain.port.ArtistGateway;
+import io.github.rubeneekhof.lastfm.domain.model.artist.ArtistSearchResult;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetCorrectionResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetInfoResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.GetSimilarResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.artist.response.SearchResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
@@ -57,6 +59,20 @@ public class ArtistGatewayImpl extends BaseGatewayImpl implements ArtistGateway 
 
     GetCorrectionResponse response =
         executeWithErrorHandling("artist.getcorrection", params, GetCorrectionResponse.class);
+    return ArtistMapper.from(response);
+  }
+
+  @Override
+  public ArtistSearchResult search(String artist, Integer limit, Integer page) {
+    Map<String, String> params =
+        ParameterBuilder.create()
+            .putRequired("artist", artist)
+            .put("limit", limit)
+            .put("page", page)
+            .build();
+
+    SearchResponse response =
+        executeWithErrorHandling("artist.search", params, SearchResponse.class);
     return ArtistMapper.from(response);
   }
 }

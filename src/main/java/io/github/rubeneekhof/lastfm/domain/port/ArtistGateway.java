@@ -1,6 +1,7 @@
 package io.github.rubeneekhof.lastfm.domain.port;
 
-import io.github.rubeneekhof.lastfm.domain.model.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.Artist;
+import io.github.rubeneekhof.lastfm.domain.model.artist.ArtistSearchResult;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,4 +11,6 @@ public interface ArtistGateway extends LastFmApiGateway {
   List<Artist> getSimilar(String artist, String mbid, Boolean autocorrect, Integer limit);
 
   Optional<Artist> getCorrection(String artist);
+
+  ArtistSearchResult search(String artist, Integer limit, Integer page);
 }
