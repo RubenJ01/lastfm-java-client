@@ -140,16 +140,16 @@ The minimum required information is artist, track, and timestamp:
 
 ````java
 import io.github.rubeneekhof.lastfm.domain.model.scrobble.Scrobble;
+import io.github.rubeneekhof.lastfm.util.UnixTime;
 
 // Create an authenticated client first
 LastFmClient client = LastFmClient.createAuthenticated(apiKey, apiSecret, sessionKey);
 
-// Scrobble a single track
-long timestamp = System.currentTimeMillis() / 1000 - 60; // 1 minute ago
+// Scrobble a single track (1 minute ago)
 Scrobble scrobble = Scrobble.builder()
         .artist("Radiohead")
         .track("Creep")
-        .timestamp(timestamp)
+        .timestamp(UnixTime.now() - 60) // 1 minute ago
         .build();
 
 ScrobbleResponse response = client.tracks().scrobble(scrobble);
@@ -161,10 +161,12 @@ System.out.println("Accepted: " + response.accepted() +", Ignored: "+response.ig
 You can include additional information like album, track number, duration, etc.:
 
 ````java
+import io.github.rubeneekhof.lastfm.util.UnixTime;
+
 Scrobble scrobble = Scrobble.builder()
     .artist("The Beatles")
     .track("Hey Jude")
-    .timestamp(System.currentTimeMillis() / 1000 - 120) // 2 minutes ago
+    .timestamp(UnixTime.daysAgo(1)) // 1 day ago
     .album("The Beatles 1967-1970")
     .albumArtist("The Beatles")
     .mbid("b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d")
@@ -207,10 +209,66 @@ ScrobbleResponse response = client.tracks().scrobble(batch);
 
 ### Important Notes About Scrobbling
 
-- **Timestamps**: Must be in UNIX timestamp format (seconds since epoch). Timestamps that are too old (more than ~14 days) or too new (in the future) will be ignored.
+- **Timestamps**: Must be in UNIX timestamp format (seconds since epoch). Timestamps that are too old (more than ~14 days) or too new (in the future) will be ignored. Use the `UnixTime` utility class for ergonomic timestamp handling (see below).
 - **Accepted vs Ignored**: The response includes counts of accepted and ignored scrobbles. Check `response.results()` to see details about each scrobble, including ignored message codes.
 - **Rate Limits**: Be mindful of Last.fm's rate limits when scrobbling multiple tracks.
 - **Session Key**: You must use an authenticated client with a valid session key. Session keys don't expire, so save yours after the first authentication.
+
+## Unix Timestamp Utilities
+
+The `UnixTime` utility class provides ergonomic methods for working with Unix timestamps (seconds since epoch, UTC). It's particularly useful for endpoints that require timestamps like `track.scrobble` and `user.getWeeklyAlbumChart`.
+
+### Basic Usage
+
+````java
+import io.github.rubeneekhof.lastfm.util.UnixTime;
+
+// Get current timestamp
+long now = UnixTime.now();
+
+// Convert ISO-8601 date string (yyyy-MM-dd) to timestamp
+long timestamp = UnixTime.at("2024-01-15");
+
+// Convert LocalDate to timestamp
+long timestamp = UnixTime.of(LocalDate.of(2024, 1, 15));
+
+// Get timestamp for N days ago
+long oneWeekAgo = UnixTime.daysAgo(7);
+
+// Create a date range (useful for weekly charts)
+UnixTime.Range lastWeek = UnixTime.lastDays(7);
+````
+
+### Using with Scrobbling
+
+````java
+// Scrobble a track from 5 minutes ago
+Scrobble scrobble = Scrobble.builder()
+    .artist("Radiohead")
+    .track("Creep")
+    .timestamp(UnixTime.now() - 300) // 5 minutes ago
+    .build();
+
+// Or scrobble from a specific date
+Scrobble scrobble = Scrobble.builder()
+    .artist("The Beatles")
+    .track("Hey Jude")
+    .timestamp(UnixTime.at("2024-01-15"))
+    .build();
+````
+
+### Using with Weekly Charts
+
+````java
+// Get last 7 days chart
+var range = UnixTime.lastDays(7);
+WeeklyAlbumChart chart = client.users().getWeeklyAlbumChart("RubenJ01", range.from(), range.to());
+
+// Or with specific dates
+long from = UnixTime.at("2024-01-15");
+long to = UnixTime.at("2024-01-22");
+WeeklyAlbumChart chart = client.users().getWeeklyAlbumChart("RubenJ01", from, to);
+````
 
 ## API Coverage
 

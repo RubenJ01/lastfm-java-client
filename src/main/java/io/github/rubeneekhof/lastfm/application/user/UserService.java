@@ -1,6 +1,7 @@
 package io.github.rubeneekhof.lastfm.application.user;
 
 import io.github.rubeneekhof.lastfm.domain.model.User;
+import io.github.rubeneekhof.lastfm.domain.model.user.WeeklyAlbumChart;
 import io.github.rubeneekhof.lastfm.domain.port.UserGateway;
 
 public class UserService {
@@ -16,5 +17,137 @@ public class UserService {
       throw new IllegalArgumentException("User must not be blank");
     }
     return gateway.getInfo(user);
+  }
+
+  /**
+   * Get an album chart for a user profile, for a given date range. If no date range is supplied,
+   * it will return the most recent album chart for this user.
+   *
+   * <p>No authentication required.
+   *
+   * <p>This is a convenience method that only requires the username.
+   *
+   * @param user the Last.fm username to fetch the charts of (required)
+   * @return the weekly album chart
+   * @throws IllegalArgumentException if user is null or blank
+   * @see #getWeeklyAlbumChart(UserGetWeeklyAlbumChartRequest) for more options including limit and
+   *     date range
+   */
+  public WeeklyAlbumChart getWeeklyAlbumChart(String user) {
+    if (user == null || user.isBlank()) {
+      throw new IllegalArgumentException("User must not be blank");
+    }
+    return getWeeklyAlbumChart(UserGetWeeklyAlbumChartRequest.user(user).build());
+  }
+
+  /**
+   * Get an album chart for a user profile with a limit.
+   *
+   * <p>No authentication required.
+   *
+   * @param user the Last.fm username to fetch the charts of (required)
+   * @param limit the number of results to fetch. Maximum 1000.
+   * @return the weekly album chart
+   * @throws IllegalArgumentException if user is null or blank, or if limit is invalid
+   * @see #getWeeklyAlbumChart(UserGetWeeklyAlbumChartRequest) for more options including date
+   *     range
+   */
+  public WeeklyAlbumChart getWeeklyAlbumChart(String user, int limit) {
+    if (user == null || user.isBlank()) {
+      throw new IllegalArgumentException("User must not be blank");
+    }
+    validateLimit(limit);
+    return getWeeklyAlbumChart(
+        UserGetWeeklyAlbumChartRequest.user(user).limit(limit).build());
+  }
+
+  /**
+   * Get an album chart for a user profile with a date range.
+   *
+   * <p>No authentication required.
+   *
+   * <p><strong>Note:</strong> Both 'from' and 'to' must be provided together, or both must be
+   * omitted.
+   *
+   * <p>Example using {@link io.github.rubeneekhof.lastfm.util.UnixTime}:
+   *
+   * <pre>{@code
+   * // Get last 7 days chart
+   * var range = UnixTime.lastDays(7);
+   * WeeklyAlbumChart chart = client.users().getWeeklyAlbumChart("RubenJ01", range.from(), range.to());
+   *
+   * // Or with specific dates
+   * long from = UnixTime.at("2024-01-15");
+   * long to = UnixTime.at("2024-01-22");
+   * WeeklyAlbumChart chart = client.users().getWeeklyAlbumChart("RubenJ01", from, to);
+   *
+   * // Or with date range
+   * getWeeklyAlbumChart("RubenJ01",
+   *     UnixTime.at("2026-01-01"),
+   *     UnixTime.now()
+   * );
+   * }</pre>
+   *
+   * @param user the Last.fm username to fetch the charts of (required)
+   * @param from the date at which the chart should start from (UNIX timestamp)
+   * @param to the date at which the chart should end on (UNIX timestamp)
+   * @return the weekly album chart
+   * @throws IllegalArgumentException if user is null or blank, or if only one of from/to is
+   *     provided
+   * @see #getWeeklyAlbumChart(UserGetWeeklyAlbumChartRequest) for more options including limit
+   * @see io.github.rubeneekhof.lastfm.util.UnixTime for convenient timestamp utilities
+   */
+  public WeeklyAlbumChart getWeeklyAlbumChart(String user, long from, long to) {
+    if (user == null || user.isBlank()) {
+      throw new IllegalArgumentException("User must not be blank");
+    }
+    return getWeeklyAlbumChart(
+        UserGetWeeklyAlbumChartRequest.user(user).from(from).to(to).build());
+  }
+
+  /**
+   * Get an album chart for a user profile with all options.
+   *
+   * <p>No authentication required.
+   *
+   * <p>This method provides full control using the builder pattern:
+   *
+   * <pre>{@code
+   * // Using raw timestamps
+   * WeeklyAlbumChart chart = client.users().getWeeklyAlbumChart(
+   *     UserGetWeeklyAlbumChartRequest.user("RubenJ01")
+   *         .limit(50)
+   *         .from(1602504000L)
+   *         .to(1603108800L)
+   *         .build()
+   * );
+   *
+   * // Using UnixTime helper (recommended)
+   * var range = UnixTime.lastDays(7);
+   * WeeklyAlbumChart chart = client.users().getWeeklyAlbumChart(
+   *     UserGetWeeklyAlbumChartRequest.user("RubenJ01")
+   *         .limit(50)
+   *         .from(range.from())
+   *         .to(range.to())
+   *         .build()
+   * );
+   * }</pre>
+   *
+   * @param request the request containing user and optional parameters
+   * @return the weekly album chart
+   * @see io.github.rubeneekhof.lastfm.util.UnixTime for convenient timestamp utilities
+   */
+  public WeeklyAlbumChart getWeeklyAlbumChart(UserGetWeeklyAlbumChartRequest request) {
+    return gateway.getWeeklyAlbumChart(
+        request.user(), request.limit(), request.from(), request.to());
+  }
+
+  private void validateLimit(int limit) {
+    if (limit <= 0) {
+      throw new IllegalArgumentException("Limit must be greater than zero");
+    }
+    if (limit > 1000) {
+      throw new IllegalArgumentException("Limit cannot exceed 1000");
+    }
   }
 }
