@@ -122,13 +122,6 @@
         </plugins>
     </build>
 
-    <!-- Distribution Management for Maven Central (via OSSRH) -->
-    <!-- To publish, you'll need to:
-         1. Create a JIRA account at https://issues.sonatype.org
-         2. Create a ticket to request repository hosting for io.github.rubeneekhof
-         3. Set up GPG signing (see: https://central.sonatype.org/publish/requirements/gpg/)
-         4. Configure OSSRH credentials in ~/.m2/settings.xml
-    -->
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
