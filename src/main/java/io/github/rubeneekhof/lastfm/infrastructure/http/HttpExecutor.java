@@ -78,6 +78,8 @@ public class HttpExecutor {
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     String body = response.body();
 
+    System.out.println(body);
+
     try {
       JsonNode rootNode = objectMapper.readTree(body);
       if (rootNode.has("error") && !rootNode.get("error").isNull()) {
