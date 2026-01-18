@@ -4,7 +4,7 @@
 ![Maven](https://img.shields.io/badge/Maven-3.9+-orange)
 ![Lines of Code](https://raw.githubusercontent.com/RubenJ01/lastfm-java-client/badges/badge.svg)
 
-A Java client library for the Last.fm API. Built with Clean Architecture principles for maintainability and testability.
+A Java client for the Last.fm API.
 
 ## Quick Start
 
@@ -64,14 +64,12 @@ dependencies {
 - **[API Reference](https://github.com/RubenJ01/lastfm-java-client/wiki/API-Reference)** - Complete API coverage
 - **[Project Structure](https://github.com/RubenJ01/lastfm-java-client/wiki/Project-Structure)** - Architecture overview
 
-## Features
+## What it does
 
-- ✅ Type-safe API with builder pattern
-- ✅ Full authentication support
-- ✅ Scrobbling capabilities
-- ✅ Clean architecture (Hexagonal/Ports & Adapters)
-- ✅ Comprehensive error handling
-- ✅ Utility classes for common operations
+- Builder pattern for requests
+- Authentication support
+- Scrobbling
+- Helper classes for timestamps and dates
 
 ## License
 
