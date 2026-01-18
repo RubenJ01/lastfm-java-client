@@ -7,7 +7,33 @@
 
     <groupId>io.github.rubeneekhof</groupId>
     <artifactId>lastfm-java-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>LastFM Java Client</name>
+    <description>A Java client library for the Last.fm API</description>
+    <url>https://github.com/RubenJ01/lastfm-java-client</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Ruben Eekhof</name>
+            <url>https://github.com/RubenJ01</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/RubenJ01/lastfm-java-client.git</connection>
+        <developerConnection>scm:git:https://github.com/RubenJ01/lastfm-java-client.git</developerConnection>
+        <url>https://github.com/RubenJ01/lastfm-java-client</url>
+    </scm>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -53,6 +79,66 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <!-- Distribution Management for Maven Central (via OSSRH) -->
+    <!-- To publish, you'll need to:
+         1. Create a JIRA account at https://issues.sonatype.org
+         2. Create a ticket to request repository hosting for io.github.rubeneekhof
+         3. Set up GPG signing (see: https://central.sonatype.org/publish/requirements/gpg/)
+         4. Configure OSSRH credentials in ~/.m2/settings.xml
+    -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>OSSRH Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>OSSRH Staging</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 </project>
