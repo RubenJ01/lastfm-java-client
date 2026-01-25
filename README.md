@@ -12,7 +12,9 @@ A Java client for the Last.fm API.
 import io.github.rubeneekhof.lastfm.api.LastFmClient;
 
 var apiKey = "your-api-key-here";
-LastFmClient client = LastFmClient.create(apiKey);
+LastFmClient client = LastFmClient.builder()
+    .apiKey(apiKey)
+    .build();
 
 var artist = client.artists().getInfo("Cher");
 ```
@@ -33,7 +35,7 @@ var artist = client.artists().getInfo("Cher");
     <dependency>
         <groupId>com.github.RubenJ01</groupId>
         <artifactId>lastfm-java-client</artifactId>
-        <version>1.0.0</version>
+        <version>2.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -48,7 +50,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.RubenJ01:lastfm-java-client:1.0.0'
+    implementation 'com.github.RubenJ01:lastfm-java-client:2.0.0'
 }
 ```
 
@@ -60,15 +62,19 @@ dependencies {
 - **[Basic Usage](https://github.com/RubenJ01/lastfm-java-client/wiki/Basic-Usage)** - Getting started guide
 - **[Authentication](https://github.com/RubenJ01/lastfm-java-client/wiki/Authentication)** - Setting up authenticated requests
 - **[Scrobbling](https://github.com/RubenJ01/lastfm-java-client/wiki/Scrobbling)** - Recording listening history
+- **[Pagination](https://github.com/RubenJ01/lastfm-java-client/wiki/Pagination)** - Working with paginated results
 - **[UnixTime Utilities](https://github.com/RubenJ01/lastfm-java-client/wiki/UnixTime-Utilities)** - Timestamp helper documentation
 - **[API Reference](https://github.com/RubenJ01/lastfm-java-client/wiki/API-Reference)** - Complete API coverage
 - **[Project Structure](https://github.com/RubenJ01/lastfm-java-client/wiki/Project-Structure)** - Architecture overview
+
+📋 **[Changelog](CHANGELOG.md)** - Version history and release notes
 
 ## What it does
 
 - Builder pattern for requests
 - Authentication support
 - Scrobbling
+- Pagination helpers for iterating over results
 - Helper classes for timestamps and dates
 
 ## License

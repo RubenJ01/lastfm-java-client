@@ -15,15 +15,25 @@ import java.util.stream.Collectors;
 
 public class HttpExecutor {
 
-  private static final String BASE_URL = "https://ws.audioscrobbler.com/2.0/";
+  private static final String DEFAULT_BASE_URL = "https://ws.audioscrobbler.com/2.0/";
   private final String apiKey;
   private final HttpClient httpClient;
   private final ObjectMapper objectMapper;
+  private final String baseUrl;
+  private final String userAgent;
 
   public HttpExecutor(String apiKey, ObjectMapper objectMapper) {
+    this(apiKey, objectMapper, DEFAULT_BASE_URL, null, null);
+  }
+
+  public HttpExecutor(
+      String apiKey, ObjectMapper objectMapper, String baseUrl, HttpClient httpClient,
+      String userAgent) {
     this.apiKey = apiKey;
-    this.httpClient = HttpClient.newHttpClient();
     this.objectMapper = objectMapper;
+    this.baseUrl = baseUrl != null ? baseUrl : DEFAULT_BASE_URL;
+    this.httpClient = httpClient != null ? httpClient : HttpClient.newHttpClient();
+    this.userAgent = userAgent;
   }
 
   public String getApiKey() {
@@ -41,9 +51,13 @@ public class HttpExecutor {
                         + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
             .collect(Collectors.joining("&"));
 
-    String url = BASE_URL + "?method=" + method + "&api_key=" + apiKey + "&format=json&" + query;
+    String url = baseUrl + "?method=" + method + "&api_key=" + apiKey + "&format=json&" + query;
 
-    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url));
+    if (userAgent != null) {
+      requestBuilder.header("User-Agent", userAgent);
+    }
+    HttpRequest request = requestBuilder.GET().build();
 
     return executeRequest(request);
   }
@@ -64,10 +78,15 @@ public class HttpExecutor {
                         + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
             .collect(Collectors.joining("&"));
 
-    HttpRequest request =
+    HttpRequest.Builder requestBuilder =
         HttpRequest.newBuilder()
-            .uri(URI.create(BASE_URL))
-            .header("Content-Type", "application/x-www-form-urlencoded")
+            .uri(URI.create(baseUrl))
+            .header("Content-Type", "application/x-www-form-urlencoded");
+    if (userAgent != null) {
+      requestBuilder.header("User-Agent", userAgent);
+    }
+    HttpRequest request =
+        requestBuilder
             .POST(HttpRequest.BodyPublishers.ofString(formData, StandardCharsets.UTF_8))
             .build();
 
@@ -77,8 +96,6 @@ public class HttpExecutor {
   private String executeRequest(HttpRequest request) throws IOException, InterruptedException {
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     String body = response.body();
-
-    System.out.println(body);
 
     try {
       JsonNode rootNode = objectMapper.readTree(body);
