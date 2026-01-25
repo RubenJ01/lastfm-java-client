@@ -111,6 +111,43 @@ public class ArtistService {
     return gateway.search(request.artist(), request.limit(), request.page());
   }
 
+  /**
+   * Creates a pagination helper for searching artists. Provides convenient methods for iterating
+   * over all pages of search results.
+   *
+   * <p>Example usage:
+   *
+   * <pre>{@code
+   * // Iterate over all artists
+   * for (Artist artist : artistService.searchPaged("Low").iterateAll()) {
+   *   // process artist
+   * }
+   *
+   * // Get first 100 artists
+   * List<Artist> artists = artistService.searchPaged("Low").toList(100);
+   * }</pre>
+   *
+   * @param artist the artist name to search for
+   * @return a pagination helper for the search results
+   */
+  public ArtistSearchPagination searchPaged(String artist) {
+    validateArtistName(artist);
+    return new ArtistSearchPagination(this, artist, DEFAULT_LIMIT);
+  }
+
+  /**
+   * Creates a pagination helper for searching artists with a custom page size.
+   *
+   * @param artist the artist name to search for
+   * @param pageSize the number of results per page
+   * @return a pagination helper for the search results
+   */
+  public ArtistSearchPagination searchPaged(String artist, int pageSize) {
+    validateArtistName(artist);
+    validateLimit(pageSize);
+    return new ArtistSearchPagination(this, artist, pageSize);
+  }
+
   private void validatePage(int page) {
     if (page <= 0) {
       throw new IllegalArgumentException("Page must be greater than zero");
