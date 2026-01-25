@@ -1,8 +1,12 @@
 # LastFM Java Client
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
-![Maven](https://img.shields.io/badge/Maven-3.9+-orange)
 ![Lines of Code](https://raw.githubusercontent.com/RubenJ01/lastfm-java-client/badges/badge.svg)
+![Maven](https://img.shields.io/badge/Maven-3.9+-orange)
+![License](https://img.shields.io/github/license/RubenJ01/lastfm-java-client)
+![JitPack](https://jitpack.io/v/RubenJ01/lastfm-java-client.svg)
+![GitHub Stars](https://img.shields.io/github/stars/RubenJ01/lastfm-java-client?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/RubenJ01/lastfm-java-client?style=social)
 
 A Java client for the Last.fm API.
 
