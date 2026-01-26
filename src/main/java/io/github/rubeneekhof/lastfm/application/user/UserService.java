@@ -4,6 +4,13 @@ import io.github.rubeneekhof.lastfm.domain.model.User;
 import io.github.rubeneekhof.lastfm.domain.model.user.FriendsResult;
 import io.github.rubeneekhof.lastfm.domain.model.user.WeeklyAlbumChart;
 import io.github.rubeneekhof.lastfm.domain.port.UserGateway;
+import io.github.rubeneekhof.lastfm.util.pagination.Page;
+import io.github.rubeneekhof.lastfm.util.pagination.PageFetcher;
+import io.github.rubeneekhof.lastfm.util.pagination.Paginator;
+import io.github.rubeneekhof.lastfm.util.pagination.PaginationUtils;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Function;
 
 public class UserService {
 
@@ -220,4 +227,185 @@ public class UserService {
     return gateway.getFriends(
         request.user(), request.recenttracks(), request.limit(), request.page());
   }
+
+  private static final int DEFAULT_PAGE_SIZE = 50;
+  private static final int API_MAX_PAGE_SIZE = 50; // Maximum items per page allowed by Last.fm API
+
+  /**
+   * Creates a pagination helper for getting user friends. Provides convenient methods for iterating
+   * over all pages of friends results.
+   *
+   * <p>Example usage:
+   *
+   * <pre>{@code
+   * // Iterate over all friends
+   * for (Friend friend : client.users().getFriendsPaged("aidan-").iterateAll()) {
+   *   // process friend
+   * }
+   *
+   * // Get first 100 friends
+   * List<Friend> friends = client.users().getFriendsPaged("aidan-").toList(100);
+   * }</pre>
+   *
+   * @param user the Last.fm username to fetch the friends of (required)
+   * @return a pagination wrapper for the friends results
+   * @throws IllegalArgumentException if user is null or blank
+   */
+  public Paginator<FriendsResult.Friend> getFriendsPaged(String user) {
+    return getFriendsPaged(user, false, DEFAULT_PAGE_SIZE);
+  }
+
+  /**
+   * Creates a pagination helper for getting user friends with all parameters.
+   *
+   * @param user the Last.fm username to fetch the friends of (required)
+   * @param recenttracks whether to include information about friends' recent listening in the
+   *     response
+   * @param pageSize the number of results per page
+   * @return a pagination wrapper for the friends results
+   * @throws IllegalArgumentException if user is null or blank, or if pageSize is invalid
+   */
+  public Paginator<FriendsResult.Friend> getFriendsPaged(String user, boolean recenttracks, int pageSize) {
+    return getFriendsPaged(
+        UserGetFriendsRequest.user(user)
+            .recenttracks(recenttracks)
+            .limit(pageSize)
+            .build());
+  }
+
+  /**
+   * Creates a pagination helper for getting user friends using the builder pattern.
+   *
+   * <p>Example usage:
+   *
+   * <pre>{@code
+   * // Using regular request (for backward compatibility)
+   * Paginator<Friend> wrapper = client.users().getFriendsPaged(
+   *     UserGetFriendsRequest.user("aidan-")
+   *         .recenttracks(true)
+   *         .limit(50)
+   *         .build()
+   * );
+   *
+   * // Using paginated request (recommended)
+   * Paginator<Friend> wrapper = client.users().getFriendsPaged(
+   *     UserGetFriendsPagedRequest.user("aidan-")
+   *         .recenttracks(true)
+   *         .pageSize(50)
+   *         .maxItems(100)
+   *         .build()
+   * );
+   * }</pre>
+   *
+   * @param request the friends request (page parameter is ignored, pagination is handled internally)
+   * @return a pagination wrapper for the friends results
+   */
+  public Paginator<FriendsResult.Friend> getFriendsPaged(UserGetFriendsRequest request) {
+    String user = request.user();
+    boolean recenttracks = request.recenttracks() != null ? request.recenttracks() : false;
+    int pageSize = request.limit() != null ? request.limit() : DEFAULT_PAGE_SIZE;
+    
+    PageFetcher<FriendsResult.Friend> pageFetcher = page -> {
+      UserGetFriendsRequest pageRequest = UserGetFriendsRequest.user(user)
+          .recenttracks(recenttracks)
+          .limit(pageSize)
+          .page(page)
+          .build();
+      FriendsResult result = getFriends(pageRequest);
+      return new Page<>(
+          result.friends(),
+          result.page(),
+          result.perPage(),
+          Optional.of(result.totalPages()),
+          Optional.of(result.total()));
+    };
+    
+    Function<Integer, PageFetcher<FriendsResult.Friend>> pageSizeModifier = newPageSize -> page -> {
+      UserGetFriendsRequest pageRequest = UserGetFriendsRequest.user(user)
+          .recenttracks(recenttracks)
+          .limit(newPageSize)
+          .page(page)
+          .build();
+      FriendsResult result = getFriends(pageRequest);
+      return new Page<>(
+          result.friends(),
+          result.page(),
+          result.perPage(),
+          Optional.of(result.totalPages()),
+          Optional.of(result.total()));
+    };
+    
+    return new Paginator<>(pageFetcher, pageSizeModifier);
+  }
+
+  /**
+   * Creates a pagination helper for getting user friends using the paginated request builder.
+   * This is the recommended way to create paginators as it clearly separates page size from max items.
+   *
+   * <p>Example usage:
+   *
+   * <pre>{@code
+   * // Fetch 50 items per page, but only return first 100 items total
+   * Paginator<Friend> wrapper = client.users().getFriendsPaged(
+   *     UserGetFriendsPagedRequest.user("aidan-")
+   *         .recenttracks(true)
+   *         .pageSize(50)
+   *         .maxItems(100)
+   *         .build()
+   * );
+   *
+   * // Just limit total items to 5
+   * Paginator<Friend> wrapper = client.users().getFriendsPaged(
+   *     UserGetFriendsPagedRequest.user("aidan-")
+   *         .maxItems(5)
+   *         .build()
+   * );
+   * }</pre>
+   *
+   * @param request the paginated friends request
+   * @return a pagination wrapper for the friends results
+   */
+  public Paginator<FriendsResult.Friend> getFriendsPaged(UserGetFriendsPagedRequest request) {
+    String user = request.user();
+    boolean recenttracks = request.recenttracks() != null ? request.recenttracks() : false;
+    Integer requestedPageSize = request.pageSize();
+    Integer maxItems = request.maxItems();
+    
+    // Optimize page size to minimize API calls when maxItems is set
+    int optimalPageSize =
+        PaginationUtils.optimizePageSize(requestedPageSize, maxItems, DEFAULT_PAGE_SIZE, API_MAX_PAGE_SIZE);
+    
+    PageFetcher<FriendsResult.Friend> pageFetcher = page -> {
+      UserGetFriendsRequest pageRequest = UserGetFriendsRequest.user(user)
+          .recenttracks(recenttracks)
+          .limit(optimalPageSize)
+          .page(page)
+          .build();
+      FriendsResult result = getFriends(pageRequest);
+      return new Page<>(
+          result.friends(),
+          result.page(),
+          result.perPage(),
+          Optional.of(result.totalPages()),
+          Optional.of(result.total()));
+    };
+    
+    Function<Integer, PageFetcher<FriendsResult.Friend>> pageSizeModifier = newPageSize -> page -> {
+      UserGetFriendsRequest pageRequest = UserGetFriendsRequest.user(user)
+          .recenttracks(recenttracks)
+          .limit(newPageSize)
+          .page(page)
+          .build();
+      FriendsResult result = getFriends(pageRequest);
+      return new Page<>(
+          result.friends(),
+          result.page(),
+          result.perPage(),
+          Optional.of(result.totalPages()),
+          Optional.of(result.total()));
+    };
+    
+    return new Paginator<>(pageFetcher, pageSizeModifier, maxItems);
+  }
+
 }
