@@ -1,6 +1,7 @@
 package io.github.rubeneekhof.lastfm.application.user;
 
 import io.github.rubeneekhof.lastfm.domain.model.User;
+import io.github.rubeneekhof.lastfm.domain.model.user.FriendsResult;
 import io.github.rubeneekhof.lastfm.domain.model.user.WeeklyAlbumChart;
 import io.github.rubeneekhof.lastfm.domain.port.UserGateway;
 
@@ -149,5 +150,74 @@ public class UserService {
     if (limit > 1000) {
       throw new IllegalArgumentException("Limit cannot exceed 1000");
     }
+  }
+
+  /**
+   * Get a list of the user's friends (follow each other) on Last.fm.
+   *
+   * <p>No authentication required.
+   *
+   * <p>This is a convenience method that only requires the username.
+   *
+   * @param user the Last.fm username to fetch the friends of (required)
+   * @return the friends result with pagination info
+   * @throws IllegalArgumentException if user is null or blank
+   * @see #getFriends(UserGetFriendsRequest) for more options including pagination
+   */
+  public FriendsResult getFriends(String user) {
+    return getFriends(UserGetFriendsRequest.user(user).build());
+  }
+
+  /**
+   * Get a list of the user's friends with pagination options.
+   *
+   * <p>No authentication required.
+   *
+   * @param user the Last.fm username to fetch the friends of (required)
+   * @param recenttracks whether to include information about friends' recent listening in
+   *     the response
+   * @param limit the number of results to fetch per page (optional, default: 50)
+   * @param page the page number to fetch (optional, default: 1)
+   * @return the friends result with pagination info
+   * @throws IllegalArgumentException if user is null or blank, or if page/limit are invalid
+   * @see #getFriends(UserGetFriendsRequest) for builder pattern usage
+   */
+  public FriendsResult getFriends(String user, Boolean recenttracks, Integer limit, Integer page) {
+    UserGetFriendsRequest.Builder builder = UserGetFriendsRequest.user(user);
+    if (recenttracks != null) {
+      builder.recenttracks(recenttracks);
+    }
+    if (limit != null) {
+      builder.limit(limit);
+    }
+    if (page != null) {
+      builder.page(page);
+    }
+    return getFriends(builder.build());
+  }
+
+  /**
+   * Get a list of the user's friends with all options using the builder pattern.
+   *
+   * <p>No authentication required.
+   *
+   * <p>Example usage:
+   *
+   * <pre>{@code
+   * FriendsResult friends = client.users().getFriends(
+   *     UserGetFriendsRequest.user("aidan-")
+   *         .recenttracks(true)
+   *         .limit(10)
+   *         .page(1)
+   *         .build()
+   * );
+   * }</pre>
+   *
+   * @param request the request containing user and optional parameters
+   * @return the friends result with pagination info
+   */
+  public FriendsResult getFriends(UserGetFriendsRequest request) {
+    return gateway.getFriends(
+        request.user(), request.recenttracks(), request.limit(), request.page());
   }
 }
