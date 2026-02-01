@@ -1,14 +1,16 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.user;
 
-import io.github.rubeneekhof.lastfm.domain.model.User;
+import io.github.rubeneekhof.lastfm.domain.model.user.User;
+import io.github.rubeneekhof.lastfm.domain.model.Track;
 import io.github.rubeneekhof.lastfm.domain.model.user.FriendsResult;
+import io.github.rubeneekhof.lastfm.domain.model.user.LovedTracksResult;
 import io.github.rubeneekhof.lastfm.domain.model.user.WeeklyAlbumChart;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseMapper;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetFriendsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetInfoResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetLovedTracksResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetWeeklyAlbumChartResponse;
 import java.util.List;
-import java.util.Optional;
 
 public class UserMapper extends BaseMapper {
 
@@ -168,6 +170,93 @@ public class UserMapper extends BaseMapper {
   }
 
   private static int parseTotalPages(GetFriendsResponse.Attr attr) {
+    if (attr == null || attr.totalPages == null) {
+      return 0;
+    }
+    return parseNumber(attr.totalPages);
+  }
+
+  public static LovedTracksResult from(GetLovedTracksResponse response) {
+    if (response == null || response.lovedtracks == null) {
+      return new LovedTracksResult(null, 1, 0, 50, 0, List.of());
+    }
+
+    GetLovedTracksResponse.LovedTracks lovedTracks = response.lovedtracks;
+    GetLovedTracksResponse.Attr attr = lovedTracks.attr;
+
+    String user = attr != null ? attr.user : null;
+    int page = parseLovedTracksPage(attr);
+    int total = parseLovedTracksTotal(attr);
+    int perPage = parseLovedTracksPerPage(attr);
+    int totalPages = parseLovedTracksTotalPages(attr);
+
+    List<LovedTracksResult.LovedTrack> trackList = List.of();
+    if (lovedTracks.track != null) {
+      trackList = lovedTracks.track.stream().map(UserMapper::fromLovedTrack).toList();
+    }
+
+    return new LovedTracksResult(user, page, total, perPage, totalPages, trackList);
+  }
+
+  private static LovedTracksResult.LovedTrack fromLovedTrack(GetLovedTracksResponse.TrackData data) {
+    if (data == null) {
+      return null;
+    }
+
+    Track.Artist artist = null;
+    if (data.artist != null) {
+      artist = new Track.Artist(
+          data.artist.name,
+          data.artist.mbid,
+          data.artist.url);
+    }
+
+    Track.Streamable streamable = null;
+    if (data.streamable != null) {
+      streamable = new Track.Streamable(
+          "1".equals(data.streamable.fulltrack),
+          "1".equals(data.streamable.text));
+    }
+
+    long date = 0;
+    if (data.date != null && data.date.uts != null && !data.date.uts.isBlank()) {
+      date = parseLong(data.date.uts);
+    }
+
+    return new LovedTracksResult.LovedTrack(
+        data.name,
+        data.mbid,
+        data.url,
+        artist,
+        mapImages(data.image, img -> new LovedTracksResult.LovedTrack.Image(img.getSize(), img.getUrl())),
+        streamable,
+        date);
+  }
+
+  private static int parseLovedTracksPage(GetLovedTracksResponse.Attr attr) {
+    if (attr == null || attr.page == null) {
+      return 1;
+    }
+    int parsed = parseNumber(attr.page);
+    return parsed > 0 ? parsed : 1;
+  }
+
+  private static int parseLovedTracksTotal(GetLovedTracksResponse.Attr attr) {
+    if (attr == null || attr.total == null) {
+      return 0;
+    }
+    return parseNumber(attr.total);
+  }
+
+  private static int parseLovedTracksPerPage(GetLovedTracksResponse.Attr attr) {
+    if (attr == null || attr.perPage == null) {
+      return 50;
+    }
+    int parsed = parseNumber(attr.perPage);
+    return parsed > 0 ? parsed : 50;
+  }
+
+  private static int parseLovedTracksTotalPages(GetLovedTracksResponse.Attr attr) {
     if (attr == null || attr.totalPages == null) {
       return 0;
     }

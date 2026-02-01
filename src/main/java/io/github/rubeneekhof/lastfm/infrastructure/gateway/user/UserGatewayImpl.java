@@ -1,14 +1,16 @@
 package io.github.rubeneekhof.lastfm.infrastructure.gateway.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.rubeneekhof.lastfm.domain.model.User;
+import io.github.rubeneekhof.lastfm.domain.model.user.User;
 import io.github.rubeneekhof.lastfm.domain.model.user.FriendsResult;
+import io.github.rubeneekhof.lastfm.domain.model.user.LovedTracksResult;
 import io.github.rubeneekhof.lastfm.domain.port.UserGateway;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.BaseGatewayImpl;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.common.ParameterBuilder;
 import io.github.rubeneekhof.lastfm.domain.model.user.WeeklyAlbumChart;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetFriendsResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetInfoResponse;
+import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetLovedTracksResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.gateway.user.response.GetWeeklyAlbumChartResponse;
 import io.github.rubeneekhof.lastfm.infrastructure.http.HttpExecutor;
 import java.util.Map;
@@ -56,6 +58,20 @@ public class UserGatewayImpl extends BaseGatewayImpl implements UserGateway {
 
     GetFriendsResponse response =
         executeWithErrorHandling("user.getFriends", params, GetFriendsResponse.class);
+    return UserMapper.from(response);
+  }
+
+  @Override
+  public LovedTracksResult getLovedTracks(String user, Integer limit, Integer page) {
+    Map<String, String> params =
+        ParameterBuilder.create()
+            .putRequired("user", user)
+            .put("limit", limit)
+            .put("page", page)
+            .build();
+
+    GetLovedTracksResponse response =
+        executeWithErrorHandling("user.getLovedTracks", params, GetLovedTracksResponse.class);
     return UserMapper.from(response);
   }
 }
